@@ -291,11 +291,11 @@ const UpdateAccount = () => {
     />
   </label>
   <p className="text-xl text-center font-medium text-primary-bg-color my-[30px]">Banner</p>
-  <img
+  <Image
     src={selectedBanner}
     alt=""
-    width="400"
-    height="200"
+    width={400}
+    height={200}
     id="previewImg1"
     className=' w-full shadow-xl  rounded-lg'
   />

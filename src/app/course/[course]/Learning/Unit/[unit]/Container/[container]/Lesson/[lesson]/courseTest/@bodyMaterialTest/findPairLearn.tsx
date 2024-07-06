@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getVocabFindPair } from "@/service/api/apiVocabRequest";
 import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import LoadingContent from "@/app/components/partialView/loadingContent";
 
 interface FindPairProps {
   params: any;
@@ -22,9 +23,12 @@ export const FindPairLearn: React.FC<FindPairProps> = ({ params }) => {
   const [selectedPair, setSelectedPair] = useState<any[]>([]);
   const [correctPairs, setCorrectPairs] = useState<Set<number>>(new Set());
   const [feedback, setFeedback] = useState<{ indices: number[], correct: boolean } | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getVocabFindPair(idLesson, dispatch);
+    getVocabFindPair(idLesson, dispatch).finally(() => {
+      setTimeout(() => setIsLoading(false), 2000);
+    }); 
   }, [dispatch, tagCheck]);
 
   useEffect(() => {
@@ -117,19 +121,23 @@ export const FindPairLearn: React.FC<FindPairProps> = ({ params }) => {
 
   const currentQuestion = currentChunk.length > 0 ? currentChunk.slice(0, 16) : null;
 
+  if (isLoading) {
+    return <LoadingContent />;
+  }
+
   if (tagCheck !== tag) {
     return <div>Page không tồn tại</div>;
   }
 
   return (
-    <div className="grid wide grid-wide-course-learn pt-11">
+    <div className="grid w-full wide grid-wide-course-learn pt-11">
       {currentQuestion && (
-        <div className="grid max-w-[900px] m-auto grid-cols-4 grid-rows-4 gap-2 mb-10">
+        <div className="grid max-w-[800px] aspect-square m-auto grid-cols-4 gap-2 mb-10 max-md:grid-cols-3">
           {currentQuestion.map((item: any, index: number) => (
             <div
               key={index}
               onClick={(e) => { e.preventDefault(); handleCardClick(item, index); }}
-              className={`p-5 w-full transition duration-300 h-[200px] flex items-center justify-center text-wrap cursor-pointer
+              className={`p-5 text-center transition duration-300 flex items-center justify-center text-wrap cursor-pointer
                 ${item.type === 'title' ? 'paircard__box-volcabulary' : 'text-nav-hover-text-color'}
                 ${correctPairs.has(item.vocabId) && !(feedback && feedback.indices.includes(index)) ? 'invisible' : ''}
                 ${selectedPair.some(pair => pair.index === index) ? 'bg-gray-300' : 'bg-white'}

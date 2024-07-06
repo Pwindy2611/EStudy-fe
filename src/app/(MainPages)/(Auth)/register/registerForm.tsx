@@ -11,14 +11,13 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { RegisterBody, RegisterBodyType } from '@/schemaValidate/auth.schema'
 import TextTitle from './textTitle';
 
-import { Bounce, toast, ToastContainer } from 'react-toastify';
+import { Bounce, toast} from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 export default function RegisterForm(){
     const dispatch = useDispatch();
@@ -39,6 +38,17 @@ export default function RegisterForm(){
     })
 
     const handleRegister = async (values:RegisterBodyType)=>{
+      const idToast =  toast.loading('Đang tạo tài khoản ...', {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      });
         const { email, password, username} = values;
         const newUser = {
           UserEmail: email,
@@ -47,7 +57,10 @@ export default function RegisterForm(){
         };
        const toastRes= await registerUser(newUser,dispatch);
         if(toastRes?.status!=200 &&toastRes?.status){
-        toast.error(toastRes?.data + '!', {
+        toast.update(idToast, {
+        render:'Tạo tài khoản thất bại, '+toastRes?.data + '!',
+        type: "error", 
+        isLoading: false ,
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -60,7 +73,10 @@ export default function RegisterForm(){
           });
         }
         else{
-          toast.success('Create Account SuccessFull !', {
+          toast.update(idToast, {
+            render:'Tạo tài khoản thành công !',
+            type: "success", 
+            isLoading: false ,
             position: "bottom-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -71,7 +87,7 @@ export default function RegisterForm(){
             theme:"colored",
             transition: Bounce,
               });
-            toast.warn(`We've sent an authentication link to your email, check your email !`, {
+            toast.warn(`Chúng tôi đã gửi đường dẫn xác thực đến email của bạn, hãy kiểm tra !`, {
               position: "bottom-right",
               autoClose: 5000,
               hideProgressBar: false,
@@ -82,7 +98,7 @@ export default function RegisterForm(){
               theme: "light",
               transition: Bounce,
               });
-              toast.info('The path is only available for 10 minutes', {
+              toast.info('Đường dẫn sẽ hết hiệu lực sau 10 phút', {
                 position: "bottom-right",
                 autoClose: 10000,
                 hideProgressBar: false,

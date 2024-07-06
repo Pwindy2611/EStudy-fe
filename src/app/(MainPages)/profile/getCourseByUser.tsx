@@ -1,6 +1,7 @@
 "use client"
 import Image from 'next/image';
 import  Link  from 'next/link';
+import GetLoadingCourse from "@/app/components/course/loadingCourse"
 
 import { useEffect,useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,7 +27,7 @@ export default function GetCoursesByUser() {
     }, [dispatch, user]);
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return  <GetLoadingCourse></GetLoadingCourse>
     }
 
 
@@ -40,8 +41,8 @@ export default function GetCoursesByUser() {
             <div className=" mt-16 grid grid-cols-3 gap-14">
             {listCourses.map((course:any) =>{
                 return(
-                <Link key={course.courseId} href={`/course/${course.courseId}/Learning/Unit/LandingCourse/courseOption`}className=" group">
-                <div className=" shadow-md flex flex-col items-center group-hover:shadow-lg transition duration-500 delay-75 ease-in-out bg-white p-4 rounded-xl mb-5">
+                <Link key={course.courseId} href={`/course/${course.courseId}/Learning/Unit/LandingCourse/courseOption`}className=" group h-full">
+                <div className=" shadow-md flex flex-col items-center group-hover:shadow-lg transition duration-500 delay-75 ease-in-out bg-white p-4 rounded-xl mb-5 h-full">
                 <div className='mb-5 w-full h-72 group relative overflow-hidden rounded-[10px] '>
                   <Image className=' object-cover h-full transition duration-500 ease group-hover:brightness-[95%] group-hover:scale-105' 
                   width={1000} 
@@ -60,6 +61,6 @@ export default function GetCoursesByUser() {
             </div>
           </>
         )}
-        </div>
+      </div>
     )
 }

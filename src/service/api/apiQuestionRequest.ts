@@ -12,7 +12,10 @@ import {
   getDoubleChoiceSuccess,
   getReadingStart,
   getReadingFailed,
-  getReadingSuccess
+  getReadingSuccess,
+  getNoParaStart,
+  getNoParaFailed,
+  getNoParaSuccess
 }
 from "@/service/reduxState/questionSlices"
 
@@ -84,5 +87,15 @@ export const getAllListenSpeech = async (lessonId:any,dispatch:any) => {
     dispatch(getListenSpeechSuccess(res));
   } catch (err:any) {
     dispatch(getListenSpeechFailed(err.response.data));
+  }
+}
+
+export const getAllQesNoPara = async (lessonId:any,dispatch:any) => {
+  dispatch(getNoParaStart());
+  try {
+    const res = await request.post('/Question_API/Get_AllQuestionReadingWithOutParagraph', lessonId);
+    dispatch(getNoParaSuccess(res));
+  } catch (err:any) {
+    dispatch(getNoParaFailed(err.response.data));
   }
 }

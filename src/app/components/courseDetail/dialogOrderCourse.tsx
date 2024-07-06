@@ -6,13 +6,16 @@ import { useSelector } from "react-redux";
 import { useRouter } from 'next/navigation';
 import { useDispatch } from "react-redux";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import {
     Form,
     FormControl,
@@ -26,6 +29,9 @@ import { Label } from "@/components/ui/label"
 import { OrderCourseBody, OrderCourseBodyType } from '@/schemaValidate/orderCourse.schema'
 
 import { RequestApiOrder } from "@/service/api/apiOrderRequest";
+
+import { Bounce, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 interface OrderDialogProps {
   courseId: number;
@@ -54,7 +60,7 @@ const OrderDialog: React.FC<OrderDialogProps> = ({ courseId, CoursesDetail,lastP
   }
 
   const handleOrder = async (values: OrderCourseBodyType) => {
-    setIsSubmitting(true); // Disable the button
+    setIsSubmitting(true); 
     const { address, email } = values;
     const dataOrder = {
       UserId: user.userId,
@@ -63,22 +69,64 @@ const OrderDialog: React.FC<OrderDialogProps> = ({ courseId, CoursesDetail,lastP
       TotalAmount: CoursesDetail.coursePrice,
       Email: email,
     };
-    await RequestApiOrder(dataOrder, dispatch,lastPrice, CoursesDetail, user.userId, router.push);
-    setIsSubmitting(false); // Enable the button again
+   const idToast=toast.loading('Đang chuyển hướng đến trang Momo....', {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+    });
+    const res = await RequestApiOrder(dataOrder, dispatch,lastPrice, CoursesDetail, user.userId, router.push);
+    console.log(res)
+    if(res?.status ==400){
+      toast.update(idToast, { 
+        render:'Chuyển hướng thất bại !',
+         type: "error", 
+         isLoading: false ,
+         position: "bottom-right",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+         theme: "colored",
+         transition: Bounce,});
+    }
+    else{
+      toast.update(idToast, { 
+        render:'Chuyển hướng thành công !',
+         type: "success", 
+         isLoading: false ,
+         position: "bottom-right",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+         theme: "colored",
+         transition: Bounce,});
+    }
+    setIsSubmitting(false); 
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
         <Button onClick={checkUser}>ĐĂNG KÝ HỌC NGAY</Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[490px]">
-        <DialogHeader>
-          <DialogTitle>Thanh toán khoá học</DialogTitle>
-          <DialogDescription>
-            Mua khoá học: [IELTS General Training] Intensive Writing: Thực hành luyện tập Writing GT
-          </DialogDescription>
-        </DialogHeader>
+      </AlertDialogTrigger>
+      <AlertDialogContent className="sm:max-w-[490px]">
+        <AlertDialogHeader>
+          <AlertDialogTitle>Thanh toán khoá học</AlertDialogTitle>
+          <AlertDialogDescription>
+          Mua khoá học: {CoursesDetail.courseName}
+          </AlertDialogDescription>
+        </AlertDialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleOrder)} noValidate>
             <div className="grid gap-4 py-4">
@@ -117,17 +165,18 @@ const OrderDialog: React.FC<OrderDialogProps> = ({ courseId, CoursesDetail,lastP
                 />
               </div>
             </div>
-            <button 
-              className="bg-primary-bg-color w-full text-white block mt-[10px] p-[10px] rounded-[10px] no-underline text-base text-center border-[1px] border-transparent" 
-              type="submit" 
-              disabled={isSubmitting}
-            >
-              ĐẶT HÀNG NGAY
-            </button>
+            <AlertDialogFooter>
+            <AlertDialogCancel className=' bg-slate-300 w-full text-black block mt-[10px] p-[10px] rounded-[10px] no-underline text-base text-center border-[1px] border-transparent'>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+             className="bg-primary-bg-color w-full text-white block mt-[10px] p-[10px] rounded-[10px] no-underline text-base text-center border-[1px] border-transparent" 
+             type="submit" 
+             disabled={isSubmitting}
+            > ĐẶT HÀNG NGAY</AlertDialogAction>
+            </AlertDialogFooter>
           </form>
         </Form>
-      </DialogContent>
-    </Dialog>
+      </AlertDialogContent>
+    </AlertDialog>
   )
 }
 

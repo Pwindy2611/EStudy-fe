@@ -31,7 +31,7 @@ const UpdateAccount = () => {
   const [oldPasswordVisible, setOldPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState(infoUser?.userImage);
-  const [selectedBanner, setSelectedBanner] = useState('https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg');
+  const [selectedBanner, setSelectedBanner] = useState('/public/img/add_image-1024');
 
 
   const formInfoUser = useForm<infoUserType>({
@@ -67,6 +67,17 @@ const UpdateAccount = () => {
   };
 
   const handleBasicInfoSave = async (values: infoUserType) => {
+    const idToast =  toast.loading('Đang kiểm tra...', {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+    });
     const { username, email, phoneNumber, description} =values;
     const updatedUser = {
       userId: user?.user?.userId,
@@ -77,31 +88,50 @@ const UpdateAccount = () => {
     }
     const res=await InfoUser(updatedUser,dispatch);
     if(res?.status==200 && res?.status){
-      toast.success('Cập nhật thông tin thành công!', {
+      toast.update(idToast, {
+        render:'Cập nhật thông tin thành công!',
+        type: "success", 
+        isLoading: false ,
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
+        theme: "colored",
         progress: undefined,
       });
       await getAllInfoUser({userId: user?.user?.userId},dispatch)
     }
     else{
-      toast.error('Cập nhật thông tin thất bại!', {
+      toast.update(idToast, {
+        render:'Cập nhật thông tin thất bại!',
+        type: "success", 
+        isLoading: false ,
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
+        theme: "colored",
         progress: undefined,
       });
     }
   };
 
   const handlePasswordSave = async (values: ResetPasswordBodyType) => {
+    const idToast =  toast.loading('Đang kiểm tra...', {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+    });
     const {newPassword,confirmPassword,oldPassword} =values;
     const data={
     userId : user?.user?.userId,
@@ -110,32 +140,51 @@ const UpdateAccount = () => {
     confirmPassword: confirmPassword
     }
     const res=await editPassword(data);
-    console.log(res)
     if(res?.status==200 && res?.status){
-      toast.success(res?.message+' !', {
+      toast.update(idToast, {
+        render:'Cập nhật mật khẩu thành công !',
+        type: "success", 
+        isLoading: false ,
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
+        theme: "colored",
         progress: undefined,
       });
     }
     else{
-      toast.error(res?.data?.message+' !', {
+      console.log(res)
+      toast.update(idToast, {
+        render:'Cập nhật mật khẩu thất bại !',
+        type: "error", 
+        isLoading: false ,
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
+        theme: "colored",
         progress: undefined,
       });
     }
   };
 
   const handleImageSave = async () => {
+    const idToast =  toast.loading('Đang kiểm tra...', {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+    });
     const formData = new FormData();
     formData.append('userId', user?.user?.userId);
     if (selectedAvatar) {
@@ -148,23 +197,31 @@ const UpdateAccount = () => {
     const response = await UpdateImage(formData);
 
       if (response.status === 200) {
-        toast.success('Cập nhật ảnh thành công!', {
+        toast.update(idToast ,{
+          render:'Cập nhật ảnh thành công!',
+          type: "success", 
+          isLoading: false ,
           position: "bottom-right",
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
+          theme: "colored",
           progress: undefined,
         });
       } else {
-        toast.error('Cập nhật ảnh thất bại!', {
+        toast.update(idToast, {
+          render:'Cập nhật ảnh thất bại!',
+          type: "error", 
+          isLoading: false ,
           position: "bottom-right",
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
+          theme: "colored",
           progress: undefined,
         });
       }
@@ -274,14 +331,16 @@ const UpdateAccount = () => {
       </div>
       <div className={`${activeTab === 1 ? 'flex flex-col' : 'hidden'}`}>
   <p className="text-xl text-center font-medium text-primary-bg-color my-[30px]">Ảnh đại diện</p>
+  <div className='w-[300px] rounded-full h-[300px] shadow-2xl m-auto mb-8 overflow-hidden'>
   <Image
     src={selectedAvatar}
     alt=""
-    width={300}
-    height={300}
+    width={1000}
+    height={1000}
     id="previewImg"
-    className='rounded-full shadow-2xl m-auto mb-8'
+    className='object-cover  w-full h-full'
   />
+  </div>
   <label className=" m-auto my-6 cursor-pointer text-base font-medium text-primary-bg-color w-[180px] p-[10px] rounded-[4px] border-[1px] border-primary-bg-color bg-white hover:bg-gray-100 text-center transition duration-300">
     Chọn ảnh đại diện
     <input

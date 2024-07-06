@@ -54,8 +54,8 @@ export default function GetPoplarCourses() {
                       course.courseSale > 0 ? 
                       (
                         <div className="flex items-center">                  
-                         <span className=" text-xl font-semibold text-price-color">{addDotsToCurrency(course.coursePrice)}đ</span>
-                        <span className=" text-xl line-through px-3">{addDotsToCurrency(course.lastPrice)}đ</span>
+                         <span className=" text-xl font-semibold text-price-color">{addDotsToCurrency(course.lastPrice)}đ</span>
+                        <span className=" text-xl line-through px-3">{addDotsToCurrency(course.coursePrice)}đ</span>
                         <span className=" py-[3px] px-[6px] text-white font-bold text-sm bg-primary-bg-orange-color rounded-xl my-[10px]">-{course.courseSale}%</span>
                         </div>   
 

@@ -52,28 +52,41 @@ export default function LoginForm() {
     const storedEmail = sessionStorage.getItem('registeredEmail');
     const countdownEndTime = Number(sessionStorage.getItem('countdownEndTime'));
     const currentTime = new Date().getTime();
+    const idToast =  toast.loading('Đang đăng nhập ...', {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+    });
     const toastRes = await loginUser(newUser, dispatch);
     if (toastRes?.status != 200 && toastRes?.status) {
-      clearSessionData();
-      sessionStorage.setItem('registeredEmail', email);
-      setShowCountdown(false);
-      setShowResendCode(false);
-      toast.error(toastRes?.data + '!', {
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        transition: Bounce,
-      });
+      toast.update(idToast, { 
+        render: 'Đăng nhập thất bại !',
+         type: "error", 
+         isLoading: false ,
+         position: "bottom-right",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+         theme: "colored",
+         transition: Bounce,});
       if (toastRes?.data == "User is not verification") {
         if(!(storedEmail === email && countdownEndTime > currentTime))
           {
+            clearSessionData();
+            sessionStorage.setItem('registeredEmail', email);
+            setShowCountdown(false);
+            setShowResendCode(false);
             handleTimeout();
-            toast.info('Click resend to resend the authentication link', {
+            toast.info('Bấm gửi lại để nhận lại đường dẫn xác thực!', {
             position: "bottom-right",
             autoClose: 10000,
             hideProgressBar: false,
@@ -86,7 +99,7 @@ export default function LoginForm() {
           });
         }
         else{
-          toast.info('The latest link has been sent, please check the latest message in your email !', {
+          toast.info('Đường dẫn đã được gửi, hãy kiểm tra email của bạn !', {
             position: "bottom-right",
             autoClose: 10000,
             hideProgressBar: false,
@@ -104,7 +117,10 @@ export default function LoginForm() {
       }
       
     } else {
-      toast.success('Login SuccessFull !', {
+      toast.update(idToast, {
+        render:'Đăng nhập thành công !',
+        type: "success",
+        isLoading: false,
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -114,7 +130,7 @@ export default function LoginForm() {
         progress: undefined,
         theme: "colored",
         transition: Bounce,
-      });
+         });
       clearSessionData();
       navigate.push('/');
     }
@@ -128,9 +144,22 @@ export default function LoginForm() {
     const emailUser = {
       userEmail : sessionStorage.getItem('registeredEmail')
   }
+  const idToast =  toast.loading('Đang gửi ...', {
+    position: "bottom-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "dark",
+    transition: Bounce,
+  });
     const res = await reSendEmail(emailUser);
-    console.log(emailUser);
-    toast.success(res+' ! The path is only available for 10 minutes', {
+    toast.update(idToast, {
+      render:'Gửi link thành công ! Đường dẫn sẽ có hiệu lực trong vòng 10 phút',
+      type: "success",
+      isLoading: false,
       position: "bottom-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -153,12 +182,26 @@ export default function LoginForm() {
   }
 
   const handleForgotPassword =async ()=>{
+    const idToast =  toast.loading('Đang gửi ...', {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+    });
     const emailUser = {
       userEmail : sessionStorage.getItem('registeredEmail')
   }
     const resForgot = await forgotPassword(emailUser);
     if(resForgot?.status ===200){
-      toast.success(resForgot?.message + '!', {
+      toast.update(idToast, {
+        render:'Gửi thành công !',
+        type: "success",
+        isLoading: false,
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -171,7 +214,10 @@ export default function LoginForm() {
       });
     }
     else{
-      toast.error(resForgot?.message + '!', {
+      toast.update(idToast, {
+        render:resForgot?.message + 'Gửi thất bại !',
+        type: "error",
+        isLoading: false,
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -221,7 +267,7 @@ export default function LoginForm() {
                         className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
                         onClick={() => setPasswordVisible(!passwordVisible)}
                       >
-                        {passwordVisible ? '🙈' : '🐵'}
+                        {passwordVisible ? '🐵':'🙈' }
                       </span>
                     </div>
                   </FormControl>

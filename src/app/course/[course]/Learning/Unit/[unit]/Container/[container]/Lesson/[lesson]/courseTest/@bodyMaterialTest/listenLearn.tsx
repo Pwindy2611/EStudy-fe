@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getVocabListen } from '@/service/api/apiVocabRequest';
 import { useSearchParams } from 'next/navigation';
-
+import LoadingContent from "@/app/components/partialView/loadingContent";
 interface ListenLearnProps {
   params: any;
 }
@@ -22,12 +22,12 @@ export const ListenLearn: React.FC<ListenLearnProps> = ({ params }) => {
   const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
   const [autoMove, setAutoMove] = useState(false); // State để lưu trạng thái của checkbox
   const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null); // State để lưu trữ tạm thời index được highlight
-
+  const [isLoading, setIsLoading] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    getVocabListen(idLesson, dispatch);
-  }, [dispatch]);
+    getVocabListen(idLesson, dispatch).finally(() => setIsLoading(false));
+  }, [dispatch,tagCheck]);
 
   useEffect(() => {
     if (audioRef.current && ListChunk && ListChunk[currentPage]) {
@@ -105,13 +105,17 @@ export const ListenLearn: React.FC<ListenLearnProps> = ({ params }) => {
     setAutoMove(!autoMove);
   };
 
+  const currentChunk = ListChunk ? ListChunk[currentPage] : null;
+  
+  if (isLoading) {
+    return <LoadingContent />;
+  }
+
   if (tagCheck !== tag) {
     return <div>Page không tồn tại</div>;
   }
 
-  const currentChunk = ListChunk ? ListChunk[currentPage] : null;
  
-
   return (
     <div>
       <div className="">

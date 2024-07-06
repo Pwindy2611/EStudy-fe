@@ -27,6 +27,17 @@ export default function ActiveCourse()
   });
 
   const handleActive = async (values: ActiveCodeType) => {
+    const idToast =  toast.loading('Kiểm tra mã kích hoạt...', {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+    });
     if(user){
       const codeActive=values;
       const dataReq={
@@ -34,9 +45,11 @@ export default function ActiveCourse()
         code: codeActive.code
       }
       const res=await ActiveCodeCourse(dataReq);
-      console.log(res)
       if(res.status===200){
-        toast.success(res?.message+' !', {
+        toast.update(idToast, {
+          render:'Kích hoạt thành công !',
+          type: "success",
+          isLoading: false,
           position: "bottom-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -49,7 +62,10 @@ export default function ActiveCourse()
         });
       }
       else{
-        toast.error(res?.data?.message, {
+        toast.update(idToast, {
+          render:'Kích hoạt thất bại !',
+          type: "error", 
+          isLoading: false ,
           position: "bottom-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -63,7 +79,10 @@ export default function ActiveCourse()
       }
     }
     else{
-      toast.error('Please Login First!', {
+      toast.update(idToast, {
+        render:'Bạn chưa đăng nhập !',
+        type: "error", 
+        isLoading: false ,
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,

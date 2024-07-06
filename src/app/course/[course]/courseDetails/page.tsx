@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useDispatch } from "react-redux";
 import { useRouter } from 'next/navigation';
 import { useSelector } from "react-redux";
+import  LoadingEvent from "@/app/components/partialView/loadingEvent"
 
 import {getDetailCourse} from "@/service/api/apiCourseRequest"
 import { useEffect} from 'react';
@@ -27,7 +28,7 @@ export default function CourseDetail({ params }: { params: {course: string } })
   const lastPrice =useSelector((state: any) => state.ThunkReducer.courses.CourseDetail?.data?.finalPrice);
   const amountUser = useSelector((state: any) => state.ThunkReducer.courses.CourseDetail?.data);
   if(state.isFetching==true){
-    return <div className='w-full py-[60px] text-5xl font-extrabold text-center'>...Loading</div>;
+    return <LoadingEvent/>
   }
   else{
     if (!courseDetail || courseId !== courseDetail.courseId) {

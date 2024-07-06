@@ -39,11 +39,10 @@ export const registerUser = async (user:any, dispatch:any) => {
   }
 };
 
-export const logOut = async (dispatch:any,navigate:any) => {
+export const logOut = async (dispatch:any) => {
   dispatch(logOutStart());
   try {
     dispatch(logOutSuccess());
-    navigate("/login");
   } catch (err) {
     dispatch(logOutFailed());
   }

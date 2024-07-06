@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllQuestionOfLesson } from "@/service/api/apiQuestionRequest";
 import { useSearchParams } from 'next/navigation';
-
+import LoadingContent from "@/app/components/partialView/loadingContent";
 interface MultiChoiceProps {
   params: any;
 }
@@ -16,30 +16,23 @@ export const MultiChoiceLearn: React.FC<MultiChoiceProps> = ({ params }) => {
   const tagCheck = useSelector((state: any) => state.ThunkReducer?.question?.questions?.data?.lessonTag?.lessonTag);
 
   const [currentPage, setCurrentPage] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState('');
+  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
+  const [incorrectAnswers, setIncorrectAnswers] = useState<string[]>([]);
+  const [answeredCorrectly, setAnsweredCorrectly] = useState(false);
   const [autoMove, setAutoMove] = useState(false);
-  const [blinkEffect, setBlinkEffect] = useState(false);
-
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getAllQuestionOfLesson(idLesson, dispatch);
+    getAllQuestionOfLesson(idLesson, dispatch).finally(() => {
+      setTimeout(() => setIsLoading(false), 1000);
+    }); 
   }, [dispatch, tagCheck]);
 
   useEffect(() => {
-    if (audioRef.current && ListQuestion && ListQuestion[currentPage]) {
-      const currentQuestion = ListQuestion[currentPage];
-      if (currentQuestion.questionAudio) {
-        audioRef.current.src = currentQuestion.questionAudio;
-        audioRef.current.load();
-        setTimeout(() => {
-          audioRef.current?.play().catch((error: any) => {
-            console.error('Failed to play audio:', error.message);
-          });
-        }, 500);
-      }
-    }
-  }, [currentPage, ListQuestion]);
+    setSelectedAnswer(null);
+    setIncorrectAnswers([]);
+    setAnsweredCorrectly(false);
+  }, [currentPage]);
 
   const handlePrevious = () => {
     if (currentPage > 0) {
@@ -64,20 +57,18 @@ export const MultiChoiceLearn: React.FC<MultiChoiceProps> = ({ params }) => {
   const currentQuestion = ListQuestion ? ListQuestion[currentPage] : null;
 
   const handleAnswerClick = (answer: string) => {
+    if (answeredCorrectly || incorrectAnswers.includes(answer)) return;
     setSelectedAnswer(answer);
     if (currentQuestion) {
       if (currentQuestion.correctAnswer === answer) {
+        setAnsweredCorrectly(true);
         if (autoMove) {
           setTimeout(() => {
             handleNext();
           }, 300);
         }
       } else {
-        setBlinkEffect(true);
-        setTimeout(() => {
-          setBlinkEffect(false);
-          setSelectedAnswer('');
-        }, 300);
+        setIncorrectAnswers([...incorrectAnswers, answer]);
       }
     }
   };
@@ -85,6 +76,9 @@ export const MultiChoiceLearn: React.FC<MultiChoiceProps> = ({ params }) => {
   const isAnswerCorrect = (answer: string) => {
     return currentQuestion && currentQuestion.correctAnswer === answer;
   };
+  if (isLoading) {
+    return <LoadingContent />;
+  }
 
   if(tagCheck !== tag){
     return <div>Page không tồn tại</div>;
@@ -103,28 +97,28 @@ export const MultiChoiceLearn: React.FC<MultiChoiceProps> = ({ params }) => {
           <div className="multichoice__box">
             <div className="multichoice__answer">
               <div
-                className={`multichoice__link cursor-pointer transition duration-300 ${selectedAnswer === currentQuestion.optionA ? (isAnswerCorrect(currentQuestion.optionA) ? ' bg-green-500' : (blinkEffect ? ' bg-red-600 ' : ' bg-red-600')) : ''}`}
-                onClick={() => handleAnswerClick(currentQuestion.optionA)}
+                className={`multichoice__link cursor-pointer transition duration-300 ${selectedAnswer === 'A' ? (isAnswerCorrect('A') ? ' bg-green-500' : ' bg-red-600') : (incorrectAnswers.includes('A') ? ' bg-red-600' : '')}`}
+                onClick={() => handleAnswerClick('A')}
               >
-                {currentQuestion.optionA}
+                {currentQuestion.optionA}  {selectedAnswer === 'A' ?'('+currentQuestion. optionMeanA +')':''}
               </div>
               <div
-                className={`multichoice__link cursor-pointer transition duration-300 ${selectedAnswer === currentQuestion.optionB ? (isAnswerCorrect(currentQuestion.optionB) ? 'bg-green-500' : (blinkEffect ? ' bg-red-600 ' : ' bg-red-600')) : ''}`}
-                onClick={() => handleAnswerClick(currentQuestion.optionB)}
+                className={`multichoice__link cursor-pointer transition duration-300 ${selectedAnswer === 'B' ? (isAnswerCorrect('B') ? 'bg-green-500' : ' bg-red-600') : (incorrectAnswers.includes('B') ? ' bg-red-600' : '')}`}
+                onClick={() => handleAnswerClick('B')}
               >
-                {currentQuestion.optionB}
+                {currentQuestion.optionB}  {selectedAnswer === 'B' ?'('+currentQuestion. optionMeanB +')':''}
               </div>
               <div
-                className={`multichoice__link cursor-pointer transition duration-300 ${selectedAnswer === currentQuestion.optionC ? (isAnswerCorrect(currentQuestion.optionC) ? 'bg-green-500' : (blinkEffect ? ' bg-red-600 ' : ' bg-red-600')) : ''}`}
-                onClick={() => handleAnswerClick(currentQuestion.optionC)}
+                className={`multichoice__link cursor-pointer transition duration-300 ${selectedAnswer === 'C' ? (isAnswerCorrect('C') ? 'bg-green-500' : ' bg-red-600') : (incorrectAnswers.includes('C') ? ' bg-red-600' : '')}`}
+                onClick={() => handleAnswerClick('C')}
               >
-                {currentQuestion.optionC}
+                {currentQuestion.optionC}  {selectedAnswer === 'C' ?'('+currentQuestion. optionMeanC +')':''}
               </div>
               <div
-                className={`multichoice__link cursor-pointer transition duration-300 ${selectedAnswer === currentQuestion.optionD ? (isAnswerCorrect(currentQuestion.optionD) ? 'bg-green-500' : (blinkEffect ? ' bg-red-600 ' : ' bg-red-600')) : ''}`}
-                onClick={() => handleAnswerClick(currentQuestion.optionD)}
+                className={`multichoice__link cursor-pointer transition duration-300 ${selectedAnswer === 'D' ? (isAnswerCorrect('D') ? 'bg-green-500' : ' bg-red-600') : (incorrectAnswers.includes('D') ? ' bg-red-600' : '')}`}
+                onClick={() => handleAnswerClick('D')}
               >
-                {currentQuestion.optionD}
+                {currentQuestion.optionD} {selectedAnswer === 'D' ?'('+currentQuestion. optionMeanD +')':''}
               </div>
             </div>
           </div>
@@ -154,7 +148,6 @@ export const MultiChoiceLearn: React.FC<MultiChoiceProps> = ({ params }) => {
           ))}
         </div>
       </div>
-      <audio ref={audioRef} style={{ display: 'none' }} />
     </>
   );
 };

@@ -6,12 +6,10 @@ import {
     Github,
     LifeBuoy,
     LogOut,
-    SquareMenu,
     SquareTerminal,
     User,
   } from "lucide-react"
    
-  import { Button } from "@/components/ui/button"
   import {
     DropdownMenu,
     DropdownMenuContent,
@@ -27,8 +25,10 @@ import {
   } from "@/components/ui/dropdown-menu"
   import {AvatarDemo} from "./avatar"
   import { useRouter } from 'next/navigation';
-import {useDispatch} from "react-redux";
+  import {useDispatch} from "react-redux";
   import { logOut } from "@/service/api/apiAuthRequest";
+  import { Bounce, toast } from 'react-toastify';
+  import "react-toastify/dist/ReactToastify.css";
   interface UserAccount {
     UserName: any;
     UserImage:any;
@@ -37,7 +37,33 @@ import {useDispatch} from "react-redux";
     const dispatch = useDispatch();
     const navigate = useRouter();
      const handleLogOut = () => {
-      logOut(dispatch,navigate.push);
+      const idToast =  toast.loading('Đang xử lí...', {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      });
+      logOut(dispatch);
+      toast.update(idToast, {
+        render:'Đăng xuất thành công!',
+        type: "success",
+        isLoading: false,
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+         });
+         navigate.push('/login')
      }
     
     return (
@@ -96,11 +122,11 @@ import {useDispatch} from "react-redux";
                 <DropdownMenuSubContent>
                   <DropdownMenuItem>
                     <Atom className="mr-2 h-4 w-4"></Atom>
-                    <Link href="/courseOnline" className=" text-base font-medium">Front-end</Link>
+                    <Link href="https://github.com/YunneeToiChoi/EStudy-fe.git" className=" text-base font-medium">Front-end</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <SquareTerminal className="mr-2 h-4 w-4"></SquareTerminal>
-                  <Link href="/examOnline" className=" text-base font-medium">Back-end</Link>
+                  <Link href="https://github.com/YunneeToiChoi/EStudy-be.git" className=" text-base font-medium">Back-end</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                 </DropdownMenuSubContent>

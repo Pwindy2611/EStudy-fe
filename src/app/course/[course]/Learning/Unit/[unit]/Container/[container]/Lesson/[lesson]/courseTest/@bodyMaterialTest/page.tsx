@@ -14,9 +14,11 @@ import {PictureQuiz} from './picListenQuiz';
 import {FreAskedQuestions} from './freAskedQuestions';
 import {CrazyWordQuiz} from './crazyWordQuiz';
 import {ReadingQuiz} from './readingQuiz';
+import {ReadingNoPara} from "./readingNopara"
 import {ListeningComprehension} from './listeningComprehension';
 import ListLessonComponent from "../getLesson";
 import { BreadcrumbWithCustomSeparator } from '@/components/handicraft/params/paramsCourseLearn';
+import LoadingBody from "@/app/components/partialView/loadingBody";
 
 const DefaultComponent = () => <div>Type not recognized</div>;
 DefaultComponent.displayName = 'DefaultComponent';
@@ -30,18 +32,14 @@ export default function BodyMaterial({ params }: { params: { course: string, uni
   const isValidUnit = Array.isArray(units) && units.some((unit: any) => 
     unit.unitId === Number(params.unit) && unit.courseId === Number(params.course)
   );
-
-  if (!isValidUnit) {
-    return <div>Unit không tồn tại</div>;
-  }
-
   const unitContent = Array.isArray(contentUnits) && contentUnits.find((unit: any) => unit.unitId === Number(params.unit));
   const containerContent = unitContent && Array.isArray(unitContent.containers) && unitContent.containers.find((container: any) => container.containerId === Number(params.container));
   const lessonContent = containerContent && Array.isArray(containerContent.lessons) && containerContent.lessons.find((lesson: any) => lesson.lessonId === Number(params.lesson));
 
-  if (!lessonContent) {
-    return <div>Nội dung không tồn tại</div>;
+  if (!lessonContent||!isValidUnit) {
+    return <LoadingBody></LoadingBody>
   }
+
   let Component;
 
   switch (tag) {
@@ -87,6 +85,9 @@ export default function BodyMaterial({ params }: { params: { course: string, uni
     case 'LISTEN_SPEECH':
       Component = ListeningComprehension;
       break;
+      case 'READING_NOPARA':
+      Component = ReadingNoPara;
+      break;
     default:
       Component = DefaultComponent;
       break;
@@ -116,8 +117,8 @@ export default function BodyMaterial({ params }: { params: { course: string, uni
             <ListLessonComponent params={params} />
           </div>
         </div>
-        <div className='flex w-full items-center'>
-          <div className='grid max-w-[1100px] mx-auto pb-6 pt-20 max-[1500px]:mx-10'>
+        <div className='flex w-full items-center justify-center'>
+          <div className='grid max-w-[1100px] mx-auto pb-6 pt-20 max-xl:max-w-[800px] max-md:mx-10'>
             <Component params={params}  />
           </div>
           

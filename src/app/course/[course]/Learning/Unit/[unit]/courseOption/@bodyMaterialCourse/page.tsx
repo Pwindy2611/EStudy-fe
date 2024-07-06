@@ -5,18 +5,19 @@ import { BreadcrumbWithCustomSeparator } from '@/components/handicraft/params/pa
 import ListUnitsComponent from "../getUnit";
 import Container from "./containersUnit";
 import ExtentCourse from './extentCourse';
+import LoadingBody from "@/app/components/partialView/loadingBody";
 export default function BodyCourseOption({ params }: { params: { course: string, unit: string } }) {
   const units = useSelector((state: any) => state.ThunkReducer.unit?.units?.data?.units);
-
+  const ContentsUnit = useSelector((state: any) => state.ThunkReducer.contentUnits?.ContentUnit?.data);
   const isValidUnit = Array.isArray(units) && units.some((unit: any) => 
     unit.unitId === Number(params.unit) && unit.courseId === Number(params.course)||params.unit=="ExtendCourse"
   );
 
   if (params.unit === "LandingCourse") {
     return <div>Đây là landing Page</div>;
-  } else {
-    if (!isValidUnit) {
-      return <div>Unit không tồn tại</div>;
+  }{
+    if (!isValidUnit||!ContentsUnit ) {
+      return <LoadingBody></LoadingBody>
     }
     else{
       return (
@@ -44,7 +45,7 @@ export default function BodyCourseOption({ params }: { params: { course: string,
             </div>
           </div>
           {
-            params.unit==="ExtendCourse" ? <ExtentCourse></ExtentCourse> :  <Container params={params} />
+            params.unit==="ExtendCourse" ? <ExtentCourse></ExtentCourse> :  <Container params={params}  contentsUnit={ContentsUnit} />
           }
         </div>
       );

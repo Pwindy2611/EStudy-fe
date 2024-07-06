@@ -208,6 +208,42 @@ https://elearning.engineer/api/Question_API/Get_AllQuestionReading [Tag = READIN
 https://elearning.engineer/api/Question_API/Get_AllQuestionReadingWithOutParagraph [Tag = READING_NOPARA ] (fetch)
 [lessonId]
 
+## EXAM
+-------------------------------Get_AllExams-----------------------------
+[HttpGet]
+https://elearning.engineer/api/Exam_API/Get_AllExams
+
+-------------------------------Get_ExamDetailById-----------------------------
+[HttpPost]
+https://elearning.engineer/api/Exam_API/Get_ExamDetailById
+[examId,userId] string het
+Nếu user exam có thi rồi, thì sẽ show ra box score 
+
+-------------------------------Get_ExamDetailById-----------------------------
+[HttpPost]
+https://elearning.engineer/api/Exam_API/Get_ExamDetailById
+[examId,userId] string het
+Nếu user exam có thi rồi, thì sẽ show ra box score và datetime
+Nếu chưa thi là null -> kh hiện box score 
+
+-------------------------------Get_AudioExam ----------------------------- ( AUDIO Cho cả bài thi )
+[HttpPost]
+https://elearning.engineer/api/Exam_API/Get_AudioExam
+[examId] 
+
+-------------------------------Get_ExamPart1   cho tới PART 7  ----------------------------- ( click part sẽ gửi )
+[HttpPost]
+https://elearning.engineer/api/Exam_API/Get_ExamPart1    -> 7
+[examId,tagName] ( tag name fix cứng là PART 1 -> PART 7 )
+có show ra STT câu hỏi luôn
+
+-------------------------------SubmitExam  ----------------------------- ( THoát trang giữa chừng , hết time, submit sẽ gửi lên đây )
+[HttpPost]
+https://elearning.engineer/api/Exam_API/SubmitExam
+[examId,userId,score]  score int
+
+
+
 ## Getting Started
 
 First, run the development server:
@@ -476,3 +512,52 @@ Server Response: Máy chủ phản hồi lại với thông tin về những ph�
 
 Actual Request: Sau khi nhận được phản hồi cho phép từ máy chủ, trình duyệt sẽ gửi yêu cầu chính với dữ liệu thực tế.
 
+# To learn how Streaming works in React and Next.js, it's helpful to understand Server-Side Rendering (SSR) and its limitations.
+With SSR, there's a series of steps that need to be completed before a user can see and interact with a page:
+
+First, all data for a given page is fetched on the server.
+The server then renders the HTML for the page.
+The HTML, CSS, and JavaScript for the page are sent to the client.
+A non-interactive user interface is shown using the generated HTML, and CSS.
+Finally, React hydrates the user interface to make it interactive.
+![alt text](image.png)
+These steps are sequential and blocking, meaning the server can only render the HTML for a page once all the data has been fetched. And, on the client, React can only hydrate the UI once the code for all components in the page has been downloaded.
+
+SSR with React and Next.js helps improve the perceived loading performance by showing a non-interactive page to the user as soon as possible.
+![alt text](image-1.png)
+However, it can still be slow as all data fetching on server needs to be completed before the page can be shown to the user.
+
+Streaming allows you to break down the page's HTML into smaller chunks and progressively send those chunks from the server to the client.
+![alt text](image-2.png)
+This enables parts of the page to be displayed sooner, without waiting for all the data to load before any UI can be rendered.
+
+Streaming works well with React's component model because each component can be considered a chunk. Components that have higher priority (e.g. product information) or that don't rely on data can be sent first (e.g. layout), and React can start hydration earlier. Components that have lower priority (e.g. reviews, related products) can be sent in the same server request after their data has been fetched.
+![alt text](image-3.png)
+Streaming is particularly beneficial when you want to prevent long data requests from blocking the page from rendering as it can reduce the Time To First Byte (TTFB) and First Contentful Paint (FCP). It also helps improve Time to Interactive (TTI), especially on slower devices.
+
+Example
+<Suspense> works by wrapping a component that performs an asynchronous action (e.g. fetch data), showing fallback UI (e.g. skeleton, spinner) while it's happening, and then swapping in your component once the action completes.
+import { Suspense } from 'react'
+import { PostFeed, Weather } from './Components'
+ 
+export default function Posts() {
+  return (
+    <section>
+      <Suspense fallback={<p>Loading feed...</p>}>
+        <PostFeed />
+      </Suspense>
+      <Suspense fallback={<p>Loading weather...</p>}>
+        <Weather />
+      </Suspense>
+    </section>
+  )
+}
+By using Suspense, you get the benefits of:
+
+Streaming Server Rendering - Progressively rendering HTML from the server to the client.
+Selective Hydration - React prioritizes what components to make interactive first based on user interaction.
+For more Suspense examples and use cases, please see the React Documentation.
+
+SEO
+Next.js will wait for data fetching inside generateMetadata to complete before streaming UI to the client. This guarantees the first part of a streamed response includes <head> tags.
+Since streaming is server-rendered, it does not impact SEO. You can use the Rich Results Test tool from Google to see how your page appears to Google's web crawlers and view the serialized HTML (source).

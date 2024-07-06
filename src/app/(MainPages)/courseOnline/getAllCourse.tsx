@@ -2,19 +2,27 @@
 import Image from 'next/image';
 import  Link  from 'next/link';
 
-import { useEffect} from "react";
+import { useEffect,useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {getUnregisterCourse } from "@/service/api/apiCourseRequest";
+import GetLoadingCourse from "@/app/components/course/loadingCourse"
 
 import addDotsToCurrency from "@/lib/utils/currency"
 export default function GetAllCourses() {
+  const [isLoading, setIsLoading] = useState(true);
    const user = useSelector((state: any) => state.persistedReducer.auth.login?.data?.user);
     const dispatch = useDispatch();
     const listCourses = useSelector((state: any) => state.ThunkReducer.courses.UnregisteredCourses?.data?.unregisteredCoursesResponse);
     useEffect(() => {
             const UserId = { userId: user?.userId };
-            getUnregisterCourse(UserId, dispatch);
+            getUnregisterCourse(UserId, dispatch).then(()=>{
+              setIsLoading(false);
+            })
     }, [dispatch, user]);
+
+    if (isLoading) {
+      return  <GetLoadingCourse></GetLoadingCourse>
+  }
 
     return(
       <div className="relative p-16">

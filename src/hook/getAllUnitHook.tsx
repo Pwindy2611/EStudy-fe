@@ -7,24 +7,22 @@ const useGetAllUnits = (params: any) => {
   const courseId = Number(idCourse);
   const dispatch = useDispatch();
   const user = useSelector((state: any) => state.persistedReducer.auth?.login?.data);
-  const CourseId = useSelector((state: any) => state.ThunkReducer.unit.units?.data?.units);
-
+  const unitsFromState = useSelector((state: any) => state.ThunkReducer.unit?.units?.data?.units);
+  
   const userId = user?.user.userId;
 
   const apiRequest = useMemo(() => ({
     courseId: courseId,
     userId: userId
-  }), [courseId, userId]);
-
-  const ListUnits = useSelector((state: any) => state.ThunkReducer.unit?.units?.data?.units);
+  }), [courseId, userId,dispatch]);
 
   useEffect(() => {
-    if (!CourseId || CourseId.length === 0 || !CourseId.some((unit: any) => unit.courseId === courseId)) {
+    if (!unitsFromState || !unitsFromState.some((unit: any) => unit.courseId === courseId)) {
       GetAllUnitsByCourse(apiRequest, dispatch);
     }
-  }, [dispatch, apiRequest, CourseId, courseId]);
+  }, [dispatch,courseId]);
 
-  return ListUnits;
+  return unitsFromState;
 };
 
 export default useGetAllUnits;

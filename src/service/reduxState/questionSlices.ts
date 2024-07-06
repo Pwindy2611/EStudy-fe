@@ -18,6 +18,11 @@ const questionSlice = createSlice({
             isFetching: false,
             error:false,
         },
+        NoPara:{
+            data:null,
+            isFetching: false,
+            error:false,
+        },
         Reading:{
             data:null,
             isFetching: false,
@@ -78,6 +83,19 @@ const questionSlice = createSlice({
             state.Reading.error = true;
             state.msg = action.payload;
         },
+        getNoParaStart: (state) =>{
+            state.NoPara.isFetching = true;
+        },
+        getNoParaSuccess: (state,action) => {
+            state.NoPara.isFetching = false;
+            state.NoPara.data = action.payload;
+            state.NoPara.error = false;
+        },
+        getNoParaFailed: (state,action) =>{
+            state.NoPara.isFetching = false;
+            state.NoPara.error = true;
+            state.msg = action.payload;
+        },
     }
 });
 
@@ -93,7 +111,10 @@ export const {
     getDoubleChoiceSuccess,
     getReadingStart,
     getReadingFailed,
-    getReadingSuccess
+    getReadingSuccess,
+    getNoParaStart,
+    getNoParaFailed,
+    getNoParaSuccess
 } = questionSlice.actions;
 
 export default questionSlice.reducer;

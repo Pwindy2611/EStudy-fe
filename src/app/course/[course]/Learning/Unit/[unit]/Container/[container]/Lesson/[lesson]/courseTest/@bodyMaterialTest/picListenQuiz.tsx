@@ -5,6 +5,8 @@ import { useSearchParams } from 'next/navigation';
 import { getAllQuestionOfLesson } from "@/service/api/apiQuestionRequest";
 import { Bounce, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import LoadingContent from "@/app/components/partialView/loadingContent";
+
 interface PictureQuizProps {
   params: any;
 }
@@ -20,13 +22,16 @@ export const PictureQuiz: React.FC<PictureQuizProps> = ({ params }) => {
   const [isTranslationVisible, setTranslationVisible] = useState(false);
   const [isAnswerChecked, setAnswerChecked] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   const [currentPage, setCurrentPage] = useState(0);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    getAllQuestionOfLesson(idLesson, dispatch);
+    getAllQuestionOfLesson(idLesson, dispatch).finally(() => {
+      setIsLoading(false);
+    });
   }, [dispatch, tagCheck]);
 
   useEffect(() => {
@@ -86,8 +91,7 @@ export const PictureQuiz: React.FC<PictureQuizProps> = ({ params }) => {
   const handleAnswerCheck = () => {
     if (selectedAnswer) {
       setAnswerChecked(true);
-    }
-    else{
+    } else {
       toast.info('Hãy chọn đáp án trước', {
         position: "bottom-right",
         autoClose: 5000,
@@ -99,7 +103,6 @@ export const PictureQuiz: React.FC<PictureQuizProps> = ({ params }) => {
         theme: "colored",
         transition: Bounce,
       });
-
     }
   };
 
@@ -113,6 +116,10 @@ export const PictureQuiz: React.FC<PictureQuizProps> = ({ params }) => {
   const handleAnswerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedAnswer(event.target.value);
   };
+
+  if (isLoading) {
+    return <LoadingContent />;
+  }
 
   if (tagCheck !== tag) {
     return <div>Page không tồn tại</div>;
@@ -157,15 +164,15 @@ export const PictureQuiz: React.FC<PictureQuizProps> = ({ params }) => {
                   type="radio"
                   id="A"
                   name="fav_language"
-                  value={currentQuestion.optionA}
+                  value="A"
                   onChange={handleAnswerChange}
                 />
                 <label
                   className={`pl-2 cursor-pointer ${
                     isAnswerChecked &&
-                    (currentQuestion.correctAnswer === currentQuestion.optionA
+                    (currentQuestion.correctAnswer === 'A'
                       ? 'text-green-500'
-                      : selectedAnswer === currentQuestion.optionA
+                      : selectedAnswer === 'A'
                       ? 'text-red-500'
                       : '')
                   }`}
@@ -178,15 +185,15 @@ export const PictureQuiz: React.FC<PictureQuizProps> = ({ params }) => {
                   type="radio"
                   id="B"
                   name="fav_language"
-                  value={currentQuestion.optionB}
+                  value="B"
                   onChange={handleAnswerChange}
                 />
                 <label
                   className={`pl-2 cursor-pointer ${
                     isAnswerChecked &&
-                    (currentQuestion.correctAnswer === currentQuestion.optionB
+                    (currentQuestion.correctAnswer === 'B'
                       ? 'text-green-500'
-                      : selectedAnswer === currentQuestion.optionB
+                      : selectedAnswer === 'B'
                       ? 'text-red-500'
                       : '')
                   }`}
@@ -199,15 +206,15 @@ export const PictureQuiz: React.FC<PictureQuizProps> = ({ params }) => {
                   type="radio"
                   id="C"
                   name="fav_language"
-                  value={currentQuestion.optionC}
+                  value="C"
                   onChange={handleAnswerChange}
                 />
                 <label
                   className={`pl-2 cursor-pointer ${
                     isAnswerChecked &&
-                    (currentQuestion.correctAnswer === currentQuestion.optionC
+                    (currentQuestion.correctAnswer === 'C'
                       ? 'text-green-500'
-                      : selectedAnswer === currentQuestion.optionC
+                      : selectedAnswer === 'C'
                       ? 'text-red-500'
                       : '')
                   }`}
@@ -220,15 +227,15 @@ export const PictureQuiz: React.FC<PictureQuizProps> = ({ params }) => {
                   type="radio"
                   id="D"
                   name="fav_language"
-                  value={currentQuestion.optionD}
+                  value="D"
                   onChange={handleAnswerChange}
                 />
                 <label
                   className={`pl-2 cursor-pointer ${
                     isAnswerChecked &&
-                    (currentQuestion.correctAnswer === currentQuestion.optionD
+                    (currentQuestion.correctAnswer === 'D'
                       ? 'text-green-500'
-                      : selectedAnswer === currentQuestion.optionD
+                      : selectedAnswer === 'D'
                       ? 'text-red-500'
                       : '')
                   }`}
@@ -257,7 +264,13 @@ export const PictureQuiz: React.FC<PictureQuizProps> = ({ params }) => {
                     }`}
                   >
                     <span className=" w-full h-full block px-5 py-3">
-                      {currentQuestion.questionTranslate}
+                    <strong>Đáp án đúng: {currentQuestion.correctAnswer}</strong>
+                    <div>Dịch nghĩa từng đáp án:</div>
+                    <div>(A) {currentQuestion.optionMeanA}</div>
+                    <div>(B) {currentQuestion.optionMeanB}</div>
+                    <div>(C) {currentQuestion.optionMeanC}</div>
+                    <div>(D) {currentQuestion.optionMeanD}</div>
+                    <div className='pt-2'>Nhìn vào bức tranh -{'>'} chọn đáp án {currentQuestion.correctAnswer}</div>
                     </span>
                   </div>
                 </div>

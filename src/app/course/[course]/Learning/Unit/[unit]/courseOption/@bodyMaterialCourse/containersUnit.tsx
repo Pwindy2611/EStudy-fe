@@ -1,15 +1,16 @@
 import { useSelector } from 'react-redux';
 import Link from 'next/link';
-
+import LoadingBody from "@/app/components/partialView/loadingBody";
 interface UnitsIdProps {
     params: any;
+    contentsUnit:any
 }
 
-const Container: React.FC<UnitsIdProps> = ({ params }) => {
-    const ContentsUnit = useSelector((state: any) => state.ThunkReducer.contentUnits?.ContentUnit?.data);
-    const listContainers = ContentsUnit?.find((content: any) => content.unitId === Number(params.unit));
+const Container: React.FC<UnitsIdProps> = ({ params,contentsUnit}) => {
+    const listContainers = contentsUnit?.find((content: any) => content.unitId === Number(params.unit));
     const listContainersCount = listContainers?.containers;
 
+    
     return (
         <div className="flex py-[60px]">
             <div className="mx-auto max-2xl:mx-[40px] w-[1000px] grid">

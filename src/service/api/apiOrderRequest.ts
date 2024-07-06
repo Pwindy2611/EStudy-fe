@@ -47,6 +47,7 @@ export const RequestApiOrder = async (dataOrder:any,dispatch:any,lastPrice:any,c
       await handlePayment(courseDetail,res,lastPrice,idUser,dispatch,navigate);
     }catch (err:any) {
       dispatch(OrderFailed());
+      return err.response;
     }
   }
   
@@ -60,6 +61,7 @@ export const RequestApiOrder = async (dataOrder:any,dispatch:any,lastPrice:any,c
       }
     }catch (err:any) {
       dispatch(MomoFailed())
+      return err.response;
     }
   }
 
@@ -76,9 +78,11 @@ const requestData={
   try{
     const res = await request.post('/Momo_Payment/RequestTracking',requestData);
     dispatch(NotifyMomoSuccess(res));
+    return res;
   }catch (err:any) {
     const { status, data } = err.response;
     dispatch(NotifyMomoFailed({ status, data }));
+    return err?.response;
   }
 }
 

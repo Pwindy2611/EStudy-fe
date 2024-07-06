@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { getVocabOfLesson } from "@/service/api/apiVocabRequest";
-
+import LoadingContent from "@/app/components/partialView/loadingContent";
 interface VocabFlashcardProps {
   params: any;
 }
@@ -21,20 +21,23 @@ export const VocabularyFlashCard: React.FC<VocabFlashcardProps> = ({ params }) =
   const [remainingCards, setRemainingCards] = useState<any[]>([]);
   const [isCompleted, setIsCompleted] = useState(false);
   const [isRotated, setIsRotated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getVocabOfLesson(idLesson, dispatch);
+    getVocabOfLesson(idLesson, dispatch).finally(() => {
+      setTimeout(() => setIsLoading(false), 1000);
+    }); 
   }, [dispatch]);
 
   useEffect(() => {
     if (ListFlashcard && ListFlashcard.length > 0) {
       const shuffledCards = shuffleArray(ListFlashcard);
       setRemainingCards(shuffledCards);
+   
     }
   }, [ListFlashcard]);
 
   useEffect(() => {
-    // Reset the state when tag changes
     setCurrentCardIndex(0);
     setIsRotated(false);
     setIsCompleted(false);
@@ -83,6 +86,10 @@ export const VocabularyFlashCard: React.FC<VocabFlashcardProps> = ({ params }) =
       console.error('Failed to play audio:', error.message);
     });
   };
+  if (isLoading) {
+    return <LoadingContent></LoadingContent>
+  }
+
   if(tagCheck!=tag&&tag!='flashCardDetail'){
     return <div>Page không tồn tại</div>
   }

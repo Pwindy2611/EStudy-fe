@@ -213,11 +213,11 @@ https://elearning.engineer/api/Question_API/Get_AllQuestionReadingWithOutParagra
 [HttpGet]
 https://elearning.engineer/api/Exam_API/Get_AllExams
 
--------------------------------Get_ExamDetailById-----------------------------
+
+-------------------------------OutstandingExamsUserNotTest-----------------------------
 [HttpPost]
-https://elearning.engineer/api/Exam_API/Get_ExamDetailById
-[examId,userId] string het
-Nếu user exam có thi rồi, thì sẽ show ra box score 
+https://elearning.engineer/api/Exam_API/OutstandingExamsUserNotTest ( tất cả đề thi mà ng dùng chưa thi )
+[userId]
 
 -------------------------------Get_ExamDetailById-----------------------------
 [HttpPost]
@@ -237,13 +237,36 @@ https://elearning.engineer/api/Exam_API/Get_ExamPart1    -> 7
 [examId,tagName] ( tag name fix cứng là PART 1 -> PART 7 )
 có show ra STT câu hỏi luôn
 
--------------------------------SubmitExam  ----------------------------- ( THoát trang giữa chừng , hết time, submit sẽ gửi lên đây )
+-------------------------------SubmitExam  ----------------------------- ( THoát trang giữa chừng , hết time, submit sẽ gửi lên đây ), 
 [HttpPost]
 https://elearning.engineer/api/Exam_API/SubmitExam
-[examId,userId,score]  score int
+[examId,userId,score,answer]  score int, answer (LIST) 
+
+const answers = [
+    { QuestionId: 1, Answer: "A" },
+    { QuestionId: 2, Answer: "C" },
+    { QuestionId: 3, Answer: "B" },
+    // ...
+    { QuestionId: 200, Answer: "D" }
+];
+
+const requestData = {
+    userId: userId,
+    examId: examId,
+    score: score, (int)
+    answer: answers (list)
+};
 
 
+-------------------------------ReviewQuestions  ----------------------------- ( Xem đáp án đúng sai của user  ), 
+[HttpGet]
+https://elearning.engineer/api/Exam_API/ReviewQuestions/userExamId={userExamId}
+VD : https://elearning.engineer/api/Exam_API/ReviewQuestions/userExamId=723a0b1c-c4c7-4739-a141-c4e72dd517a3
+![image](https://github.com/YunneeToiChoi/EStudy-fe/assets/109004626/efbba32d-4411-4b08-9fd1-cab2c8a06ae8)
 
+mẹo : có state = true false, 
++ true thì correct màu xanh
+- false thì show màu xanh cho correct, màu đỏ cho user answer
 ## Getting Started
 
 First, run the development server:

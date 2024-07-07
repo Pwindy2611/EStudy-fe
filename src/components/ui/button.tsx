@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "bg-primary-bg-color w-full text-white block mt-[10px] p-[10px] rounded-[10px] no-underline text-base text-center border-[1px] border-transparent"
+  "bg-primary-bg-color w-full text-white block mt-[10px] p-[10px] rounded-[10px] no-underline border-[1px] border-primary-bg-color text-base text-center border-[1px] hover:bg-white hover:text-primary-bg-color transition duration-300"
 )
 
 export interface ButtonProps

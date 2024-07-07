@@ -99,12 +99,8 @@ import {
                   <Link href="/examOnline" className=" text-base font-medium">Đề thi online</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                  <Link href="/flashCard" className=" text-base font-medium">Flashcards</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
                   <Link href="/activeCourse" className=" text-base font-medium">Kích hoạt khoá học</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuSeparator />
                 </DropdownMenuSubContent>
               </DropdownMenuPortal>
             </DropdownMenuSub>

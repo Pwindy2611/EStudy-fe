@@ -5,8 +5,6 @@ import "/public/handicraftCSS/base.css";
 import "/public/handicraftCSS/iconFontA.css";
 import ReduxProvider from "./provider";
 
-import LoadingBody from "@/app/components/partialView/loadingBody"
-
 import Header from "./components/partialView/header";
 import Footer from "./components/partialView/footer";
 
@@ -27,14 +25,14 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={roboto.className}>
         <div className="bg-primary-bg-color fixed top-[-500px] bottom-0 left-[-200px] rounded-br-full w-[1100px]"></div>
-        <div className="backdrop-blur-xl fixed top-0 bottom-0 right-0 left-0 bg-white/90"></div>
-        <div className="absolute z-20 left-0 right-0">
+        <div className="ParentLayout backdrop-blur-xl fixed top-0 bottom-0 right-0 left-0 bg-white/90 overflow-scroll overflow-x-hidden">
           <ReduxProvider>
               <Header />
-              <div className="z-30">
               {children}
-
-                <ToastContainer
+              <Footer />
+          </ReduxProvider>
+        </div>
+        <ToastContainer
                   position="top-right"
                   autoClose={5000}
                   hideProgressBar={false}
@@ -45,10 +43,6 @@ export default function RootLayout({
                   draggable
                   pauseOnHover
                 />
-              </div>
-              <Footer />
-          </ReduxProvider>
-        </div>
       </body>
     </html>
   );

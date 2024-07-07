@@ -55,6 +55,17 @@ const OrderDialog: React.FC<OrderDialogProps> = ({ courseId, CoursesDetail,lastP
 
   const checkUser = () => {
     if (!user) {
+      toast.info('Hãy đăng nhập tài khoản !', {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
       router.push("/login");
     }
   }

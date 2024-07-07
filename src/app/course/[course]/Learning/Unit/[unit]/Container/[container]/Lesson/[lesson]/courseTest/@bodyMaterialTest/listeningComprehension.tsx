@@ -153,7 +153,7 @@ export const ListeningComprehension: React.FC<ListeningComprehensionProps> = ({ 
               </div>
               <div className={`bg-tag-search-text-color transition-all duration-500 ease-in-out overflow-hidden rounded-xl ${isMeanVisible ? 'max-h-[1000px] border-[1px] border-black' : 'max-h-0 border-0'}`}>
                 <span className='w-full h-full block px-5 py-3'>
-                  mean
+                  {currentQuestion.paragraph_Mean}
                 </span>
               </div>
             </div>
@@ -224,7 +224,7 @@ export const ListeningComprehension: React.FC<ListeningComprehensionProps> = ({ 
                     <div className='w-full h-full block px-5 py-3'>
                     <span>Đáp án đúng : <strong>{currentQuestion.correctAnswer}</strong></span>
                     <br/>
-                    Mean Title
+                    {currentQuestion.title_Mean}
                     <br/>
                     <span>A. {currentQuestion.a_Mean}</span>
                     <br/>

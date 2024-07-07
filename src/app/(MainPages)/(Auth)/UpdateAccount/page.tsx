@@ -31,7 +31,7 @@ const UpdateAccount = () => {
   const [oldPasswordVisible, setOldPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState(infoUser?.userImage);
-  const [selectedBanner, setSelectedBanner] = useState('/public/img/add_image-1024');
+  const [selectedBanner, setSelectedBanner] = useState('https://images.pexels.com/photos/39811/pexels-photo-39811.jpeg?cs=srgb&dl=pexels-veeterzy-39811.jpg&fm=jpg');
 
 
   const formInfoUser = useForm<infoUserType>({

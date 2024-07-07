@@ -132,12 +132,12 @@ export const FindPairLearn: React.FC<FindPairProps> = ({ params }) => {
   return (
     <div className="grid w-full wide grid-wide-course-learn pt-11">
       {currentQuestion && (
-        <div className="grid max-w-[800px] aspect-square m-auto grid-cols-4 gap-2 mb-10 max-md:grid-cols-3">
+        <div className="grid max-w-[800px] m-auto grid-cols-4 gap-2 mb-10 max-md:grid-cols-3 max-[660px]:grid-cols-2 max-[480px]:grid-cols-1">
           {currentQuestion.map((item: any, index: number) => (
             <div
               key={index}
               onClick={(e) => { e.preventDefault(); handleCardClick(item, index); }}
-              className={`p-5 text-center transition duration-300 flex items-center justify-center text-wrap cursor-pointer
+              className={`p-5 text-center aspect-square transition duration-300 flex items-center justify-center text-wrap cursor-pointer
                 ${item.type === 'title' ? 'paircard__box-volcabulary' : 'text-nav-hover-text-color'}
                 ${correctPairs.has(item.vocabId) && !(feedback && feedback.indices.includes(index)) ? 'invisible' : ''}
                 ${selectedPair.some(pair => pair.index === index) ? 'bg-gray-300' : 'bg-white'}

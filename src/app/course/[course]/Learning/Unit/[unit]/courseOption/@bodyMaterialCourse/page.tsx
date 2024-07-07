@@ -6,6 +6,7 @@ import ListUnitsComponent from "../getUnit";
 import Container from "./containersUnit";
 import ExtentCourse from './extentCourse';
 import LoadingBody from "@/app/components/partialView/loadingBody";
+import {BackgroundBoxesDemo} from "./LandingCom"
 export default function BodyCourseOption({ params }: { params: { course: string, unit: string } }) {
   const units = useSelector((state: any) => state.ThunkReducer.unit?.units?.data?.units);
   const ContentsUnit = useSelector((state: any) => state.ThunkReducer.contentUnits?.ContentUnit?.data);
@@ -14,7 +15,7 @@ export default function BodyCourseOption({ params }: { params: { course: string,
   );
 
   if (params.unit === "LandingCourse") {
-    return <div>Đây là landing Page</div>;
+    return <BackgroundBoxesDemo></BackgroundBoxesDemo>
   }{
     if (!isValidUnit||!ContentsUnit ) {
       return <LoadingBody></LoadingBody>
@@ -35,7 +36,7 @@ export default function BodyCourseOption({ params }: { params: { course: string,
           />
           <div className="peer-checked/blockMenu:-translate-x-0 fixed bg-white pt-[120px] h-full top-0 bottom-0 right-0 left-0 -translate-x-full transition duration-500 ease-in-out">
             <div>
-              <div className="flex px-2 py-5 bg-nav-hover-text-color items-center justify-between">
+              <div className="flex px-2 py-5 bg-primary-bg-color items-center justify-between">
                 <Link href="" className="text-xl no-underline text-white">IELTS General Reading</Link>
                 <label htmlFor="content_checkbox_mb">
                   <i className="text-white text-xl cursor-pointer fa-solid fa-angle-left"></i>

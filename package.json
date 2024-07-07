@@ -23,7 +23,7 @@
     "axios": "^1.6.8",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
-    "framer-motion": "^11.2.5",
+    "framer-motion": "^11.2.13",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.378.0",
     "next": "14.2.3",
@@ -41,6 +41,7 @@
     "swr": "^2.2.5",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
+    "video-react": "^0.16.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

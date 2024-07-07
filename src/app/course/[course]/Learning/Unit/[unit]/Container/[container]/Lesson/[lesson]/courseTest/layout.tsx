@@ -14,7 +14,7 @@ const CourseTest: React.FC<CourseTestProps > = ({ navLeft, bodyMaterialTest, par
 
       if (currentCourse) {
         return (
-          <div className="content__container relative">
+          <div className="content__container relative h-fit">
             <input type="checkbox" id="content_checkbox" className="peer/checkboxTranslate hidden" />
             <NavLeftCourse>
               {navLeft}

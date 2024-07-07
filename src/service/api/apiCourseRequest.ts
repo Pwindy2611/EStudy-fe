@@ -86,9 +86,7 @@ export const getAllCoursesByUser = async (idUser:any,dispatch:any)=>{
 
 export const GetAllUnitsByCourse = async (data: any, dispatch: any) => {
   dispatch(getUnitStart());
-
   try {
-    // Gọi API để lấy danh sách các unit
     const res = await request.post('/Unit_API/Get_AllUnitsByCourse', data);
     dispatch(getUnitSuccess(res));
     
@@ -96,15 +94,10 @@ export const GetAllUnitsByCourse = async (data: any, dispatch: any) => {
     let UnitsArray: any[] = [];
 
     if (listUnits && listUnits.length > 0) {
-      // Tạo một mảng các promise để gọi API cho từng unit
       const unitPromises = listUnits.map((unit: any) =>
         request.post('/Container_API/Get_AllContainerAndLessonByUnit', { unitId: unit.unitId })
       );
-
-      // Chờ tất cả các promise hoàn thành
       const unitDetailsResponses = await Promise.all(unitPromises);
-
-      // Tạo mảng các unitDetail từ kết quả của các API call
       UnitsArray = unitDetailsResponses.map((res: any) => res.unitDetail);
 
       dispatch(getContentUnitStart());

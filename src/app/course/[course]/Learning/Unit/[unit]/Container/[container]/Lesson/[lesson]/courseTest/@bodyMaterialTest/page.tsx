@@ -18,6 +18,7 @@ import {ReadingNoPara} from "./readingNopara"
 import {ListeningComprehension} from './listeningComprehension';
 import ListLessonComponent from "../getLesson";
 import { BreadcrumbWithCustomSeparator } from '@/components/handicraft/params/paramsCourseLearn';
+import {VideoLayer} from "./videoLayer"
 import LoadingBody from "@/app/components/partialView/loadingBody";
 
 const DefaultComponent = () => <div>Type not recognized</div>;
@@ -85,6 +86,9 @@ export default function BodyMaterial({ params }: { params: { course: string, uni
     case 'LISTEN_SPEECH':
       Component = ListeningComprehension;
       break;
+      case 'VIDEO':
+      Component = VideoLayer;
+      break;
       case 'READING_NOPARA':
       Component = ReadingNoPara;
       break;
@@ -106,9 +110,9 @@ export default function BodyMaterial({ params }: { params: { course: string, uni
           id="content_checkbox_mb"
           className="peer/blockMenu nav-mobile-course__input"
         />
-        <div className="peer-checked/blockMenu:-translate-x-0 fixed bg-white pt-[120px] h-full top-0 bottom-0 right-0 left-0 -translate-x-full transition duration-500 ease-in-out">
+        <div className="peer-checked/blockMenu:-translate-x-0 fixed bg-white pt-[120px] h-full z-10 top-0 bottom-0 right-0 left-0 -translate-x-full transition duration-500 ease-in-out">
           <div>
-            <div className="flex px-2 py-5 bg-nav-hover-text-color items-center justify-between">
+            <div className="flex px-2 py-5 bg-primary-bg-color items-center justify-between">
               <Link href="" className="text-xl no-underline text-white">IELTS General Reading</Link>
               <label htmlFor="content_checkbox_mb">
                 <i className="text-white text-xl cursor-pointer fa-solid fa-angle-left"></i>
@@ -117,7 +121,7 @@ export default function BodyMaterial({ params }: { params: { course: string, uni
             <ListLessonComponent params={params} />
           </div>
         </div>
-        <div className='flex w-full items-center justify-center'>
+        <div className=' relative lex w-full items-center justify-center'>
           <div className='grid max-w-[1100px] mx-auto pb-6 pt-20 max-xl:max-w-[800px] max-md:mx-10'>
             <Component params={params}  />
           </div>

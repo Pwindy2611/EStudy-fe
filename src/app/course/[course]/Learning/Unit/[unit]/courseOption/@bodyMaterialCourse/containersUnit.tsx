@@ -12,7 +12,7 @@ const Container: React.FC<UnitsIdProps> = ({ params,contentsUnit}) => {
 
     
     return (
-        <div className="flex py-[60px]">
+        <div className="flex py-[60px] ">
             <div className="mx-auto max-2xl:mx-[40px] w-[1000px] grid">
                 <h1 className="text-3xl font-semibold mt-[50px]">{listContainers?.unitName}</h1>
                 <div className="bg-white p-5 border-[1px] border-course-border-color rounded-[10px] shadow-lg text-base my-[40px] w-full">

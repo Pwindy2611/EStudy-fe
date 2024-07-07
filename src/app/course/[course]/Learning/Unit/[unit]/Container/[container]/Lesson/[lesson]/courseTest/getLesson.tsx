@@ -10,7 +10,7 @@ const ListLessonComponent: React.FC<LessonListProps> = ({ params }) => {
   const ListLesson = useGetAllLessons(params);
   const LessonId=Number(params.lesson)
     return(
-          <div className="border-r-[1px] h-full border-r-[#e0e0e0]">
+          <div className="border-r-[1px] bg-white border-r-[#e0e0e0]">
             <ul className="list-none h-full">
             {Array.isArray(ListLesson) && ListLesson.length > 0 ? (
                     ListLesson.map((lesson: any) => (

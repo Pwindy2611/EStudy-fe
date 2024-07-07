@@ -180,17 +180,17 @@ https://elearning.engineer/api/Video_API/Get_AllVideoOfLesson [Tag = VIDEO ] (fe
 
 --------------------------Get Question Listen Picture -----------------------------------
 [HttpPost]
-https://elearning.engineer/api/Question_API/Get_AllQuestionOfLesson [Tag = LISTEN_PICTURE ] (fetch)
+https://elearning.engineer/api/Question_API/Get_AllQuestionOfLesson [Tag = LISTEN_PICTURE ] (complete)
 [lessonId]
 
 --------------------------Get Question Listen Picture -----------------------------------
 [HttpPost]
-https://elearning.engineer/api/Question_API/Get_AllListen_Quest_Res [Tag = LISTEN_QUEST_RESPONSE ] (fetch)
+https://elearning.engineer/api/Question_API/Get_AllListen_Quest_Res [Tag = LISTEN_QUEST_RESPONSE ] (complete)
 [lessonId]
 
 --------------------------Get Question Speech -----------------------------------
 [HttpPost]
-https://elearning.engineer/api/Question_API/Get_AllListenSpeech [Tag = LISTEN_SPEECH ] (fetch)
+https://elearning.engineer/api/Question_API/Get_AllListenSpeech [Tag = LISTEN_SPEECH ] (complete)
 [lessonId]
 
 --------------------------Get Question Double choice -----------------------------------
@@ -200,24 +200,32 @@ https://elearning.engineer/api/Question_API/Get_AllQuestionDoulbeChoice [Tag = D
 
 --------------------------Get Question Reading -----------------------------------
 [HttpPost]
-https://elearning.engineer/api/Question_API/Get_AllQuestionReading [Tag = READING ] (fetch)
+https://elearning.engineer/api/Question_API/Get_AllQuestionReading [Tag = READING ] (complete)
 [lessonId]
 
 --------------------------Get Question Reading WithOut Paragraph (part 5 ) -----------------------------------
 [HttpPost]
-https://elearning.engineer/api/Question_API/Get_AllQuestionReadingWithOutParagraph [Tag = READING_NOPARA ] (fetch)
+https://elearning.engineer/api/Question_API/Get_AllQuestionReadingWithOutParagraph [Tag = READING_NOPARA ] (complete)
 [lessonId]
+
+
+
+
+
+
+
 
 ## EXAM
 -------------------------------Get_AllExams-----------------------------
 [HttpGet]
-https://elearning.engineer/api/Exam_API/Get_AllExams
+https://elearning.engineer/api/Exam_API/Get_AllExams(complete)
 
 
 -------------------------------OutstandingExamsUserNotTest-----------------------------
 [HttpPost]
-https://elearning.engineer/api/Exam_API/OutstandingExamsUserNotTest ( tất cả đề thi mà ng dùng chưa thi )
-[userId]
+https://elearning.engineer/api/Exam_API/Get_ExamDetailById
+[examId,userId] string het
+Nếu user exam có thi rồi, thì sẽ show ra box score 
 
 -------------------------------Get_ExamDetailById-----------------------------
 [HttpPost]
@@ -228,45 +236,22 @@ Nếu chưa thi là null -> kh hiện box score
 
 -------------------------------Get_AudioExam ----------------------------- ( AUDIO Cho cả bài thi )
 [HttpPost]
-https://elearning.engineer/api/Exam_API/Get_AudioExam
+https://elearning.engineer/api/Exam_API/Get_AudioExam(complete)
 [examId] 
 
 -------------------------------Get_ExamPart1   cho tới PART 7  ----------------------------- ( click part sẽ gửi )
 [HttpPost]
-https://elearning.engineer/api/Exam_API/Get_ExamPart1    -> 7
+https://elearning.engineer/api/Exam_API/Get_ExamPart1    -> 7(complete)
 [examId,tagName] ( tag name fix cứng là PART 1 -> PART 7 )
 có show ra STT câu hỏi luôn
 
 -------------------------------SubmitExam  ----------------------------- ( THoát trang giữa chừng , hết time, submit sẽ gửi lên đây ), 
 [HttpPost]
 https://elearning.engineer/api/Exam_API/SubmitExam
-[examId,userId,score,answer]  score int, answer (LIST) 
-
-const answers = [
-    { QuestionId: 1, Answer: "A" },
-    { QuestionId: 2, Answer: "C" },
-    { QuestionId: 3, Answer: "B" },
-    // ...
-    { QuestionId: 200, Answer: "D" }
-];
-
-const requestData = {
-    userId: userId,
-    examId: examId,
-    score: score, (int)
-    answer: answers (list)
-};
+[examId,userId,score]  score int
 
 
--------------------------------ReviewQuestions  ----------------------------- ( Xem đáp án đúng sai của user  ), 
-[HttpGet]
-https://elearning.engineer/api/Exam_API/ReviewQuestions/userExamId={userExamId}
-VD : https://elearning.engineer/api/Exam_API/ReviewQuestions/userExamId=723a0b1c-c4c7-4739-a141-c4e72dd517a3
-![image](https://github.com/YunneeToiChoi/EStudy-fe/assets/109004626/efbba32d-4411-4b08-9fd1-cab2c8a06ae8)
 
-mẹo : có state = true false, 
-+ true thì correct màu xanh
-- false thì show màu xanh cho correct, màu đỏ cho user answer
 ## Getting Started
 
 First, run the development server:
@@ -543,19 +528,19 @@ The server then renders the HTML for the page.
 The HTML, CSS, and JavaScript for the page are sent to the client.
 A non-interactive user interface is shown using the generated HTML, and CSS.
 Finally, React hydrates the user interface to make it interactive.
-![alt text](image.png)
+![alt text](./public/img/image.png)
 These steps are sequential and blocking, meaning the server can only render the HTML for a page once all the data has been fetched. And, on the client, React can only hydrate the UI once the code for all components in the page has been downloaded.
 
 SSR with React and Next.js helps improve the perceived loading performance by showing a non-interactive page to the user as soon as possible.
-![alt text](image-1.png)
+![alt text](./public/img/image-1.png)
 However, it can still be slow as all data fetching on server needs to be completed before the page can be shown to the user.
 
 Streaming allows you to break down the page's HTML into smaller chunks and progressively send those chunks from the server to the client.
-![alt text](image-2.png)
+![alt text](./public/img/image-2.png)
 This enables parts of the page to be displayed sooner, without waiting for all the data to load before any UI can be rendered.
 
 Streaming works well with React's component model because each component can be considered a chunk. Components that have higher priority (e.g. product information) or that don't rely on data can be sent first (e.g. layout), and React can start hydration earlier. Components that have lower priority (e.g. reviews, related products) can be sent in the same server request after their data has been fetched.
-![alt text](image-3.png)
+![alt text](./public/img/image-3.png)
 Streaming is particularly beneficial when you want to prevent long data requests from blocking the page from rendering as it can reduce the Time To First Byte (TTFB) and First Contentful Paint (FCP). It also helps improve Time to Interactive (TTI), especially on slower devices.
 
 Example

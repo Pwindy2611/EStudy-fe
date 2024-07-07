@@ -17,7 +17,7 @@ export default function Home() {
 
   return (
     <div className='max-w-[1440px] max-2xl:max-w-7xl max-xl:max-w-5xl m-auto'>
-      <div className="flex gap-5 items-center">
+      <div className="flex gap-5 items-center px-3">
         <div className='w-3/6 flex flex-col justify-start gap-3'>
           <span className=' font-semibold text-5xl text-black tracking-wide'>Welcome to the</span>
           <span className='font-semibold text-5xl text-primary-bg-color tracking-wide'>Learning English</span>

@@ -27,7 +27,7 @@ export default function GetAllCourses() {
     return(
       <div className="relative p-16">
             <h2 className="  font-semibold text-3xl text-[#17165B] ">Combo khoá học online :</h2>
-            <div className=" mt-16 grid grid-cols-3 gap-14">
+            <div className=" mt-16 grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-14">
             {listCourses?.map((course:any) =>{
                 return(
                 <Link key={course.courseId} href={`/course/${course.courseId}/courseDetails`}className=" group">

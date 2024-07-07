@@ -26,7 +26,7 @@ export default function GetPoplarCourses() {
     return(
       <div className="relative my-[150px] w-screen rounded-3xl left-1/2 transform -translate-x-1/2 bg-[#F5F5FD]  p-16">
              <h2 className="  font-semibold text-3xl text-center text-[#17165B] ">Khóa học online nổi bật</h2>
-            <div className=" mt-16 grid grid-cols-4 gap-14">
+            <div className=" mt-16 grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2 gap-14">
             {listCourses?.map((course:any) =>{
                 return(
                 <Link key={course.courseId} href={`/course/${course.courseId}/courseDetails`}className=" group">

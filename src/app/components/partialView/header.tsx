@@ -101,7 +101,7 @@ export default function Header() {
               </ul>
             </div>
             <div>
-              <div className='flex gap-4'>
+              <div className='flex gap-4 px-2'>
                   {user ? (
                     <>
                     <DropdownMenuDemo UserName={user.user.userName} UserImage={user.user.userImage}></DropdownMenuDemo>

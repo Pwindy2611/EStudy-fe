@@ -47,7 +47,7 @@ export default function CourseDetail({ params }: { params: {course: string } })
   return(
     <div>
     <div className=" items-center justify-center flex">
-      <div className=" w-full py-[60px] bg-cover bg-courseDetails rounded-xl">
+      <div className=" w-full py-[60px] bg-cover bg-courseDetails rounded-xl px-2">
         <div className=" max-w-[1200px] m-auto grid">
           <h2 className=" text-3xl text-white">
             {courseDetail.courseName}

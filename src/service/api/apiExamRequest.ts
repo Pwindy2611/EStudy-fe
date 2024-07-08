@@ -36,6 +36,9 @@ import {
     getPart7Start,
     getPart7Success,
     getPart7Failed,
+    getExamRevisionStart,
+    getExamRevisionSuccess,
+    getExamRevisionFailed
 } from "@/service/reduxState/examSlices";
 
 export const getAllExams = async (dispatch:any) => {
@@ -117,5 +120,15 @@ export const fetchAllParts = async (examId: string, dispatch: any) => {
         });
     } catch (err: any) {
         parts.forEach(({ actionFailed }) => dispatch(actionFailed(err.response?.data)));
+    }
+};
+
+export const getExamRevision = async (userExamId: string, dispatch: any) => {
+    dispatch(getExamRevisionStart());
+    try {
+        const res = await request.get(`/Exam_API/ReviewQuestions/userExamId=${userExamId}`);
+        dispatch(getExamRevisionSuccess(res));
+    } catch (err: any) {
+        dispatch(getExamRevisionFailed(err.response?.data));
     }
 };

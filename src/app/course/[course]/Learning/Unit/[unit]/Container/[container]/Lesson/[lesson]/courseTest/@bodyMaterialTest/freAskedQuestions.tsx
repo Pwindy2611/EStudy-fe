@@ -20,6 +20,7 @@ export const FreAskedQuestions: React.FC<FreAskedQuestionsProps> = ({ params }) 
   const tagCheck = useSelector((state: any) => state.ThunkReducer?.listen?.ListenQuestRes?.data?.lessonTag?.lessonTag);
 
   const [isTranslationVisible, setTranslationVisible] = useState(false);
+  const [isTranscriptVisible, setTranscriptVisible] = useState(false);
   const [isAnswerChecked, setAnswerChecked] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -84,6 +85,10 @@ export const FreAskedQuestions: React.FC<FreAskedQuestionsProps> = ({ params }) 
     setTranslationVisible(!isTranslationVisible);
   };
 
+  const handleTranscriptToggle = () => {
+    setTranscriptVisible(!isTranscriptVisible);
+  };
+
   const handleAnswerCheck = () => {
     if (selectedAnswer) {
       setAnswerChecked(true);
@@ -140,7 +145,6 @@ export const FreAskedQuestions: React.FC<FreAskedQuestionsProps> = ({ params }) 
           <audio ref={audioRef} className="spell__audio my-10" controls>
             <source src={currentQuestion.questionAudio} type="audio/mpeg" />
           </audio>
-         <div className='my-2'>{currentQuestion.questionParagraph}</div>
           <div className='flex w-full gap-6'>
             <div className="w-full">
               <input
@@ -154,7 +158,7 @@ export const FreAskedQuestions: React.FC<FreAskedQuestionsProps> = ({ params }) 
                 className={`pl-2 cursor-pointer ${isAnswerChecked && (currentQuestion.correctAnswer === 'A' ? 'text-green-500' : selectedAnswer === 'A' ? 'text-red-500' : '')}`}
                 htmlFor="A"
               >
-                A. {currentQuestion.optionA}
+                A.
               </label>
               <br />
               <input
@@ -168,7 +172,7 @@ export const FreAskedQuestions: React.FC<FreAskedQuestionsProps> = ({ params }) 
                 className={`pl-2 cursor-pointer ${isAnswerChecked && (currentQuestion.correctAnswer === 'B' ? 'text-green-500' : selectedAnswer === 'B' ? 'text-red-500' : '')}`}
                 htmlFor="B"
               >
-                B. {currentQuestion.optionB}
+                B.
               </label>
               <br />
               <input
@@ -182,7 +186,7 @@ export const FreAskedQuestions: React.FC<FreAskedQuestionsProps> = ({ params }) 
                 className={`pl-2 cursor-pointer ${isAnswerChecked && (currentQuestion.correctAnswer === 'C' ? 'text-green-500' : selectedAnswer === 'C' ? 'text-red-500' : '')}`}
                 htmlFor="C"
               >
-                C. {currentQuestion.optionC}
+                C.
               </label>
               <br />
               <input
@@ -191,6 +195,19 @@ export const FreAskedQuestions: React.FC<FreAskedQuestionsProps> = ({ params }) 
                 className="answer__checkbox"
               />
               <div className={isAnswerChecked ? 'block' : 'hidden'}>
+              <div className="transcript cursor-pointer" onClick={handleTranscriptToggle}>
+                Transcript <i className="fa-solid fa-chevron-down"></i>
+              </div>
+              <div className={`bg-tag-search-text-color transition-all duration-500 ease-in-out overflow-hidden rounded-xl ${isTranscriptVisible ? 'max-h-[1000px] border-[1px] border-black' : 'max-h-0 border-0'}`}>
+                <span className='w-full h-full block px-5 py-3'>
+                 <div className='my-2'>{currentQuestion.questionParagraph}</div>
+                 <div className=' flex flex-col'>
+                  <span>(A) {currentQuestion.optionA}</span>
+                  <span>(B) {currentQuestion.optionB}</span>
+                  <span>(C) {currentQuestion.optionC}</span>
+                 </div>
+                </span>
+              </div>
                 <div className="transcript cursor-pointer" onClick={handleTranslationToggle}>
                   Giải thích đáp án <i className="fa-solid fa-chevron-down"></i>
                 </div>

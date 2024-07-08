@@ -1,6 +1,6 @@
-import "/public/handicraftCSS/loadingNavLeft.css";
+import styles from "/public/handicraftCSS/loadingNavLeft.module.css";
 export default function LoadingNavLeft(){
-    return <svg className="svg1" viewBox="25 25 50 50">
-    <circle className="circle1" r="20" cy="50" cx="50"></circle>
+    return <svg className={styles.svg} viewBox="25 25 50 50">
+    <circle className={styles.circle} r="20" cy="50" cx="50"></circle>
   </svg>
 }

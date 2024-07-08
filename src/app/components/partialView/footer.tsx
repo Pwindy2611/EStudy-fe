@@ -7,9 +7,8 @@ import  Link  from 'next/link';
 export default function Footer() {
     const pathname = usePathname();
  
-    // Kiểm tra nếu pathname thuộc các route cần ẩn
-    if (pathname.startsWith('/course/')) {
-        return null; // Không render footer
+    if (pathname.startsWith('/course/')||pathname.startsWith('/exam/')||pathname.startsWith('/PaymentConfirmation')) {
+        return null; 
     }
 
     return(

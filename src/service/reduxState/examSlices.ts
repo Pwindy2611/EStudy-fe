@@ -62,6 +62,11 @@ const examSlice = createSlice({
             isFetching: false,
             error: false,
         },
+        examRevision:{
+            data: null,
+            isFetching: false,
+            error: false,
+        },
         msg: "",
     },
     reducers: {
@@ -227,6 +232,19 @@ const examSlice = createSlice({
             state.part7.error = true;
             state.msg = action.payload;
         },
+        getExamRevisionStart: (state) => { 
+            state.examRevision.isFetching = true;
+        },
+        getExamRevisionSuccess: (state, action) => {
+            state.examRevision.isFetching = false;
+            state.examRevision.data = action.payload;
+            state.examRevision.error = false;
+        },
+        getExamRevisionFailed: (state, action) => {
+            state.examRevision.isFetching = false;
+            state.examRevision.error = true;
+            state.msg = action.payload;
+        }
     },
 });
 
@@ -267,6 +285,9 @@ export const {
     getPart7Start,
     getPart7Success,
     getPart7Failed,
+    getExamRevisionStart,
+    getExamRevisionSuccess,
+    getExamRevisionFailed,
 } = examSlice.actions;
 
 export default examSlice.reducer;

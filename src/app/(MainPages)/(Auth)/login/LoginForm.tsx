@@ -65,6 +65,7 @@ export default function LoginForm() {
     });
     const toastRes = await loginUser(newUser, dispatch);
     if (toastRes?.status != 200 && toastRes?.status) {
+      sessionStorage.setItem('registeredEmail', email);
       toast.update(idToast, { 
         render: 'Đăng nhập thất bại !',
          type: "error", 
@@ -82,7 +83,6 @@ export default function LoginForm() {
         if(!(storedEmail === email && countdownEndTime > currentTime))
           {
             clearSessionData();
-            sessionStorage.setItem('registeredEmail', email);
             setShowCountdown(false);
             setShowResendCode(false);
             handleTimeout();

@@ -46,6 +46,7 @@ const TestExam = ({ params }: { params: { exam: string } }) => {
 
     const parts = [part1, part2, part3, part4, part5, part6, part7];
 
+
     const [partQuestions, setPartQuestions] = useState<any[]>([]);
     const [selectedPart, setSelectedPart] = useState<number>(1);
     const [storageUpdated, setStorageUpdated] = useState<boolean>(false);
@@ -57,6 +58,7 @@ const TestExam = ({ params }: { params: { exam: string } }) => {
         getAudioExam(examId, dispatch);
     }, [dispatch]);
 
+    
     useEffect(() => {
         const partData = parts.map((part, index) => ({
             partName: `Part ${index + 1}`,
@@ -66,7 +68,24 @@ const TestExam = ({ params }: { params: { exam: string } }) => {
             })) : []
         }));
         setPartQuestions(partData);
+        initializeAnswerTest(parts); // Gọi hàm khởi tạo ở đây
     }, [part1, part2, part3, part4, part5, part6]);
+
+    const initializeAnswerTest = (parts: any[]) => {
+        const answerTest: { [key: string]: { QuestionId: number, Answer: string, State: boolean } } = {};
+        parts.forEach(part => {
+            if (part) {
+                part.forEach((question: any) => {
+                    answerTest[question.questionId] = {
+                        QuestionId: question.questionId,
+                        Answer: '',
+                        State: false
+                    };
+                });
+            }
+        });
+        sessionStorage.setItem('answerTest', JSON.stringify(answerTest));
+    };
 
     useEffect(() => {
         const updateIsQuestionMarked = () => {
@@ -158,7 +177,7 @@ const TestExam = ({ params }: { params: { exam: string } }) => {
 
     const isQuestionMarked = (questionId: string) => {
         const storedAnswers = JSON.parse(sessionStorage.getItem('answerTest') || '{}');
-        return storedAnswers[questionId] !== undefined;
+        return storedAnswers[questionId]?.Answer !== '';
     };
 
     const submitByCountDown = async () => {

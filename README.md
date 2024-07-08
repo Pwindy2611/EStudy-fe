@@ -250,7 +250,25 @@ có show ra STT câu hỏi luôn
 https://elearning.engineer/api/Exam_API/SubmitExam
 [examId,userId,score]  score int
 
+-------------------------------SubmitExam ----------------------------- ( THoát trang giữa chừng , hết time, submit sẽ gửi lên đây )
+[HttpPost] 
+https://elearning.engineer/api/Exam_API/SubmitExam
+[examId,userId,score,answer] score int, answer (LIST)
 
+const answers = [ { QuestionId: 1, Answer: "A" }, { QuestionId: 2, Answer: "C" }, { QuestionId: 3, Answer: "B" }, // ... { QuestionId: 200, Answer: "D" } ];
+
+const requestData = { userId: userId, examId: examId, score: score, (int) answer: answers (list) };
+
+-------------------------------ReviewQuestions ----------------------------- ( Xem đáp án đúng sai của user ), 
+[HttpGet] 
+https://elearning.engineer/api/Exam_API/ReviewQuestions/userExamId={userExamId} 
+VD : https://elearning.engineer/api/Exam_API/ReviewQuestions/userExamId=723a0b1c-c4c7-4739-a141-c4e72dd517a3
+![image](https://github.com/YunneeToiChoi/EStudy-fe/assets/109004626/cf170b96-09da-49d2-82b6-bbc50f32aa00)
+
+mẹo : có state = true false,
+
+true thì correct màu xanh
+false thì show màu xanh cho correct, màu đỏ cho user answer
 
 ## Getting Started
 

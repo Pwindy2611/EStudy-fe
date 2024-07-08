@@ -138,6 +138,9 @@ export const ListeningComprehension: React.FC<ListeningComprehensionProps> = ({ 
               Xoá hết
             </button>
           </div>
+          <audio ref={audioRef}  className="spell__audio my-10" controls>
+                <source src={currentQuestion.questionAudio} type="audio/mpeg" />
+              </audio>
           <div className='flex mt-7 min-h-[200px] w-full gap-6'>
             <div className="w-1/2 bg-slate-100 p-7">
               <div className="transcript cursor-pointer" onClick={handleTranscriptToggle}>

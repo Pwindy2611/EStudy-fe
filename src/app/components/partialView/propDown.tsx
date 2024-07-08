@@ -131,7 +131,7 @@ import {
            </Link>
           <DropdownMenuItem>
             <LifeBuoy className="mr-2 h-4 w-4" />
-            <span>Support</span>
+            <span>Hỗ trợ</span>
           </DropdownMenuItem>
           <DropdownMenuItem disabled>
             <Cloud className="mr-2 h-4 w-4" />
@@ -140,7 +140,7 @@ import {
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleLogOut}>
             <LogOut className="mr-2 h-4 w-4" />
-            <span>Log out</span>
+            <span>Đăng xuất</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

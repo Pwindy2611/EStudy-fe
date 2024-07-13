@@ -94,7 +94,7 @@ export default function ExamDetail({ params }: { params: {exam: string } })
                   <span className="ml-2 text-xs bg-green-500 text-white rounded-full px-2 py-1">Full test</span>
                 </td>
                 <td className="py-2 px-4 border-b border-gray-200">(Điểm: {detail.score})</td>
-                <td className="py-2 px-4 border-b border-gray-200">0:02:17</td>
+                <td className="py-2 px-4 border-b border-gray-200">{detail.userTime}</td>
                 <Link href={`/exam/${detail.userExamId}/examRevision`}>
                 <td className="py-2 px-4 border-b border-gray-200 text-blue-500 hover:underline cursor-pointer">Xem chi tiết</td>
                 </Link>

@@ -46,6 +46,7 @@ const ExamDialog: React.FC<examDialogProps> = ({examId}) => {
         transition: Bounce,
       });
     const storedAnswers = JSON.parse(sessionStorage.getItem('answerTest') || '{}');
+    const time= JSON.parse(sessionStorage.getItem('countdown')||'{}');
     const answersToSend = Object.keys(storedAnswers).map(key => ({
         QuestionId: parseInt(key), 
         Answer: storedAnswers[key].Answer,
@@ -56,7 +57,8 @@ const ExamDialog: React.FC<examDialogProps> = ({examId}) => {
         examId: examId,
         userId: user.user.userId,
         score: 0,
-        answer: answersToSend
+        answer: answersToSend,
+        userTime:time
     };
 
     const rest = await getCompleteExam(data,dispatch)

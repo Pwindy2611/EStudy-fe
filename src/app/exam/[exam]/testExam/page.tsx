@@ -3,10 +3,9 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { fetchAllParts, getAudioExam } from '@/service/api/apiExamRequest'; 
-import { getCompleteExam } from '@/service/api/apiExamRequest'; 
-import ExamDialog from "@/app/components/examSubmit/examSubmit"
-import ExamExitDialog from "@/app/components/examSubmit/examExit"
+import { fetchAllParts, getAudioExam, getCompleteExam } from '@/service/api/apiExamRequest'; 
+import ExamDialog from "@/app/components/examSubmit/examSubmit";
+import ExamExitDialog from "@/app/components/examSubmit/examExit";
 import Part1Component from './part1';
 import Part2Component from './part2';
 import Part3Component from './part3';
@@ -14,10 +13,8 @@ import Part4Component from './part4';
 import Part5Component from './part5';
 import Part6Component from './part6';
 import Part7Component from './part7';
-
 import LoadingBody from '@/app/components/partialView/loadingBody';
 import LoadingContent from '@/app/components/partialView/loadingContent';
-
 import { Bounce, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 
@@ -26,15 +23,7 @@ const TestExam = ({ params }: { params: { exam: string } }) => {
     const navigate = useRouter();
     const examId = idExam;
     const dispatch = useDispatch();
-
     const user = useSelector((state: any) => state.persistedReducer.auth.login?.data);
-
-    useEffect(() => {
-        if (!user) {
-            navigate.push("/login");
-        }
-    }, [user, navigate]);
-
     const audio = useSelector((state: any) => state.ThunkReducer.exam.audioExam?.data?.examAudio);
     const part1 = useSelector((state: any) => state.ThunkReducer.exam.part1?.data?.part1Response);
     const part2 = useSelector((state: any) => state.ThunkReducer.exam.part2?.data?.part2Response);
@@ -43,22 +32,25 @@ const TestExam = ({ params }: { params: { exam: string } }) => {
     const part5 = useSelector((state: any) => state.ThunkReducer.exam.part5?.data?.part5Response);
     const part6 = useSelector((state: any) => state.ThunkReducer.exam.part6?.data?.part6Responses);
     const part7 = useSelector((state: any) => state.ThunkReducer.exam.part7?.data?.part7Response);
-
     const parts = [part1, part2, part3, part4, part5, part6, part7];
-
-
     const [partQuestions, setPartQuestions] = useState<any[]>([]);
     const [selectedPart, setSelectedPart] = useState<number>(1);
     const [storageUpdated, setStorageUpdated] = useState<boolean>(false);
     const [countdown, setCountdown] = useState<number>(7200);
     const questionRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+    const [countdownComplete, setCountdownComplete] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (!user) {
+            navigate.push("/login");
+        }
+    }, [user, navigate]);
 
     useEffect(() => {
         fetchAllParts(examId, dispatch);
         getAudioExam(examId, dispatch);
     }, [dispatch]);
 
-    
     useEffect(() => {
         const partData = parts.map((part, index) => ({
             partName: `Part ${index + 1}`,
@@ -68,7 +60,7 @@ const TestExam = ({ params }: { params: { exam: string } }) => {
             })) : []
         }));
         setPartQuestions(partData);
-        initializeAnswerTest(parts); // Gọi hàm khởi tạo ở đây
+        initializeAnswerTest(parts);
     }, [part1, part2, part3, part4, part5, part6]);
 
     const initializeAnswerTest = (parts: any[]) => {
@@ -91,20 +83,10 @@ const TestExam = ({ params }: { params: { exam: string } }) => {
         const updateIsQuestionMarked = () => {
             setStorageUpdated(true);
         };
-
         updateIsQuestionMarked();
     }, []);
 
-    const [countdownComplete, setCountdownComplete] = useState<boolean>(false);
-
     useEffect(() => {
-        const storedCountdown = sessionStorage.getItem('countdown');
-        if (storedCountdown) {
-            setCountdown(parseInt(storedCountdown));
-        } else {
-            sessionStorage.setItem('countdown', JSON.stringify(countdown));
-        }
-    
         const timer = setInterval(() => {
             setCountdown(prevCountdown => {
                 const newCountdown = prevCountdown - 1;
@@ -119,7 +101,6 @@ const TestExam = ({ params }: { params: { exam: string } }) => {
             });
         }, 1000);
     
-        // Cleanup
         return () => clearInterval(timer);
     }, []);
     
@@ -129,8 +110,28 @@ const TestExam = ({ params }: { params: { exam: string } }) => {
         }
     }, [countdownComplete]);
 
-    if(!audio||!part1||!part2||!part3||!part4||!part5||!part6||!part7){
-        return (<><LoadingBody /> <div className=' w-full h-screen'><LoadingContent></LoadingContent></div></>) 
+    useEffect(() => {
+        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+            e.preventDefault();
+            e.returnValue = 'Bạn có chắc chắn muốn rời khỏi trang này? Các thay đổi chưa lưu sẽ bị mất.';
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);
+
+    if (!audio || !part1 || !part2 || !part3 || !part4 || !part5 || !part6 || !part7) {
+        return (
+            <>
+                <LoadingBody />
+                <div className='w-full h-screen'>
+                    <LoadingContent />
+                </div>
+            </>
+        );
     }
 
     const renderPartComponent = () => {
@@ -204,7 +205,8 @@ const TestExam = ({ params }: { params: { exam: string } }) => {
             examId: examId,
             userId: user.user.userId,
             score: 0,
-            answer: answersToSend
+            answer: answersToSend,
+            userTime: 0
         };
 
         const response = await getCompleteExam(data, dispatch);
@@ -248,7 +250,7 @@ const TestExam = ({ params }: { params: { exam: string } }) => {
         <div className='mt-11 mx-10'>
             <div className="testExam__header-box">
                 <h2 className="doTestExam__header">Practice Set 2023 TOEIC Test 10</h2>
-                <ExamExitDialog examId={examId}></ExamExitDialog>
+                <ExamExitDialog examId={examId} />
             </div>
             <div className="flex gap-8">
                 <div className="w-4/5">
@@ -279,7 +281,7 @@ const TestExam = ({ params }: { params: { exam: string } }) => {
                     <div className="testOnline__box">
                         <p className="testExam__time-left">Thời gian còn lại:</p>
                         <p className="testExam__time">{formatTime(countdown)}</p>
-                        <ExamDialog examId={examId}></ExamDialog>
+                        <ExamDialog examId={examId} />
                         <p className="testExam__aleart mt-4">
                             Chú ý: bạn có thể click vào số thứ tự câu hỏi trong bài để đánh dấu review
                         </p>

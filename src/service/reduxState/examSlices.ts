@@ -62,6 +62,11 @@ const examSlice = createSlice({
             isFetching: false,
             error: false,
         },
+        part8:{
+            data: null,
+            isFetching: false,
+            error: false,
+        },
         examRevision:{
             data: null,
             isFetching: false,
@@ -146,6 +151,7 @@ const examSlice = createSlice({
         getPart1Failed: (state:any, action:any) => {
             state.part1.isFetching = false;
             state.part1.error = true;
+            state.part1.data = null;
             state.msg = action.payload;
         },
 
@@ -160,6 +166,7 @@ const examSlice = createSlice({
         getPart2Failed: (state:any, action:any) => {
             state.part2.isFetching = false;
             state.part2.error = true;
+            state.part2.data = null;
             state.msg = action.payload;
         },
 
@@ -174,6 +181,7 @@ const examSlice = createSlice({
         getPart3Failed: (state:any, action:any) => {
             state.part3.isFetching = false;
             state.part3.error = true;
+            state.part3.data = null;
             state.msg = action.payload;
         },
 
@@ -188,6 +196,7 @@ const examSlice = createSlice({
         getPart4Failed: (state:any, action:any) => {
             state.part4.isFetching = false;
             state.part4.error = true;
+            state.part4.data = null;
             state.msg = action.payload;
         },
 
@@ -202,6 +211,7 @@ const examSlice = createSlice({
         getPart5Failed: (state:any, action:any) => {
             state.part5.isFetching = false;
             state.part5.error = true;
+            state.part5.data = null;
             state.msg = action.payload;
         },
 
@@ -216,6 +226,7 @@ const examSlice = createSlice({
         getPart6Failed: (state:any, action:any) => {
             state.part6.isFetching = false;
             state.part6.error = true;
+            state.part6.data = null;
             state.msg = action.payload;
         },
 
@@ -230,6 +241,21 @@ const examSlice = createSlice({
         getPart7Failed: (state:any, action:any) => {
             state.part7.isFetching = false;
             state.part7.error = true;
+            state.part7.data = null;
+            state.msg = action.payload;
+        },
+        getPart8Start: (state:any) => {
+            state.part8.isFetching = true;
+        },
+        getPart8Success: (state:any, action:any) => {
+            state.part8.isFetching = false;
+            state.part8.data = action.payload;
+            state.part8.error = false;
+        },
+        getPart8Failed: (state:any, action:any) => {
+            state.part8.isFetching = false;
+            state.part8.error = true;
+            state.part8.data = null;
             state.msg = action.payload;
         },
         getExamRevisionStart: (state) => { 
@@ -285,6 +311,9 @@ export const {
     getPart7Start,
     getPart7Success,
     getPart7Failed,
+    getPart8Start,
+    getPart8Success,
+    getPart8Failed,
     getExamRevisionStart,
     getExamRevisionSuccess,
     getExamRevisionFailed,

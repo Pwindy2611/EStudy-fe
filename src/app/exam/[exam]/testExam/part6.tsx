@@ -71,7 +71,7 @@ const Part6 = ({ questionRefs, onAnswerChange }: Part6Props) =>  {
                 >
                     <div className='flex items-center'>
                         <div className='flex-1'>
-                            {item.questionImage && <Image src={item.questionImage} alt={`Question ${item.number}`} />}
+                            {item.questionImage && <Image src={item.questionImage} width={1000} height={1000} alt={`Question ${item.number}`} />}
                         </div>
                         <div className=' w-2/5 flex gap-4 mt-5'>
                             <span className='aspect-square w-fit h-fit p-1 flex items-center justify-center as bg-blue-200 text-black font-medium text-lg rounded-full'>{item.number}</span>

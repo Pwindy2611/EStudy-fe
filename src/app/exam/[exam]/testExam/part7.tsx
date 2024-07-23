@@ -14,7 +14,7 @@ interface Part7Props {
     onAnswerChange: (questionId: string, answer: string) => void; 
 }
 
-const Part6 = ({ questionRefs, onAnswerChange }: Part7Props) => {
+const Part7 = ({ questionRefs, onAnswerChange }: Part7Props) => {
     const part7 = useSelector((state: any) => state.ThunkReducer.exam.part7?.data?.part7Response);
     const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswers>(() => {
         // Load selected answers from sessionStorage on component mount
@@ -71,7 +71,7 @@ const Part6 = ({ questionRefs, onAnswerChange }: Part7Props) => {
                 >
                     <div className='flex items-center'>
                         <div className='flex-1'>
-                            {item.questionImage && <Image src={item.questionImage} alt={`Question ${item.number}`} />}
+                            {item.questionImage && <Image width={1000} height={1000}  src={item.questionImage} alt={`Question ${item.number}`} />}
                         </div>
                         <div className=' w-2/5 flex gap-4 mt-5'>
                             <span className='aspect-square w-fit h-fit p-1 flex items-center justify-center as bg-blue-200 text-black font-medium text-lg rounded-full'>{item.number}</span>
@@ -127,4 +127,4 @@ const Part6 = ({ questionRefs, onAnswerChange }: Part7Props) => {
     );
 };
 
-export default Part6;
+export default Part7;

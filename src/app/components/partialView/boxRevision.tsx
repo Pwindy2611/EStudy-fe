@@ -69,11 +69,12 @@ export const BoxRevision: React.FC<InfoQuestionProps> = ({ examName, ObjectAnswe
         )}
         {questionText !== "Null" &&(<p className="mb-4">{questionText}</p>)}
         <div className="mb-4">
-          {renderOption(optionA, 'A')}
-          {renderOption(optionB, 'B')}
-          {renderOption(optionC, 'C')}
-          {renderOption(optionD, 'D')}
-        </div>
+        {optionA && renderOption(optionA, 'A')}
+        {optionB && renderOption(optionB, 'B')}
+        {optionC && renderOption(optionC, 'C')}
+        {optionD && renderOption(optionD, 'D')}
+    </div>
+    {userAnswer && <div>{userAnswer}</div>}
       </DialogContent>
     </Dialog>
   );

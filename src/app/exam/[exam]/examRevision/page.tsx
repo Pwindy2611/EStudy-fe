@@ -5,6 +5,7 @@ import { useEffect,useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import LoadingContent from "@/app/components/partialView/loadingContent";
 import {BoxRevision} from "@/app/components/partialView/boxRevision"
+import React from "react";
 
 export default function RevisionExam({ params }: { params: {exam: string } }) {
     const { exam: idExam } = params;
@@ -66,21 +67,26 @@ export default function RevisionExam({ params }: { params: {exam: string } }) {
             </div>
 
             <div className="my-5 grid grid-cols-3 m-auto gap-8 max-[860px]:grid-cols-2 max-[600px]:grid-cols-1">
-                {revisionList && revisionList.map((question:any, index:any) => (
-                    <div key={question.questionId} className="flex justify-center items-center">
-                        <span className='aspect-square mr-2 w-11 h-11 p-1 flex items-center justify-center bg-blue-200 text-black font-medium text-lg rounded-full'>
-                            {index + 1}
-                        </span>
-                        <span className="mr-2">{question.correctAnswer}:</span>
-                        <span className={`mr-2 ${question.userAnswer ? 'line-through' : ''}`}>
-                            {question.userAnswer || "chưa trả lời"}
-                        </span>
-                        <span className={`mr-2 ${!question.userAnswer ? 'line-through' : question.state ? 'text-green-500' : 'text-red-500'}`}>
-                            {!question.userAnswer ? '—' : question.state ? '✔' : '✘'}
-                        </span>
-                        <BoxRevision examName={examName} ObjectAnswer={question} examAudio={examAudio}></BoxRevision>
-                    </div>
-                ))}
+            {revisionList && revisionList.map((question:any, index:any) => (
+    <div key={question.questionId} className="flex justify-center items-center">
+        <span className='aspect-square mr-2 w-11 h-11 p-1 flex items-center justify-center bg-blue-200 text-black font-medium text-lg rounded-full'>
+            {index + 1}
+        </span>
+        <span className="mr-2">{question.correctAnswer}:</span>
+        {question.userAnswer.length > 2 ? null : (
+            <React.Fragment>
+                <span className={`mr-2 ${question.userAnswer ? 'line-through' : ''}`}>
+                    {question.userAnswer || "chưa trả lời"}
+                </span>
+                <span className={`mr-2 ${!question.userAnswer ? 'line-through' : question.state ? 'text-green-500' : 'text-red-500'}`}>
+                    {!question.userAnswer ? '—' : question.state ? '✔' : '✘'}
+                </span>
+            </React.Fragment>
+        ) }
+        <BoxRevision examName={examName} ObjectAnswer={question} examAudio={examAudio} />
+    </div>
+))}
+
             </div>
         </div>
     );

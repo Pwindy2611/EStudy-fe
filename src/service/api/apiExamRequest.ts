@@ -36,6 +36,9 @@ import {
     getPart7Start,
     getPart7Success,
     getPart7Failed,
+    getPart8Start,
+    getPart8Success,
+    getPart8Failed,
     getExamRevisionStart,
     getExamRevisionSuccess,
     getExamRevisionFailed
@@ -104,6 +107,7 @@ export const fetchAllParts = async (examId: string, dispatch: any) => {
         { part: "Part 5", actionStart: getPart5Start, actionSuccess: getPart5Success, actionFailed: getPart5Failed },
         { part: "Part 6", actionStart: getPart6Start, actionSuccess: getPart6Success, actionFailed: getPart6Failed },
         { part: "Part 7", actionStart: getPart7Start, actionSuccess: getPart7Success, actionFailed: getPart7Failed },
+        { part: "Part 8", actionStart: getPart8Start, actionSuccess: getPart8Success, actionFailed: getPart8Failed },
     ];
     parts.forEach(({ actionStart }) => dispatch(actionStart()));
 

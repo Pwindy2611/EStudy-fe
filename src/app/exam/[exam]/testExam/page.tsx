@@ -34,7 +34,7 @@ const TestExam = ({ params }: { params: { exam: string } }) => {
     const part6 = useSelector((state: any) => state.ThunkReducer.exam.part6?.data?.part6Responses);
     const part7 = useSelector((state: any) => state.ThunkReducer.exam.part7?.data?.part7Response);
     const part8 = useSelector((state: any) => state.ThunkReducer.exam.part8?.data?.part8Response);
-    const parts = [part1, part2, part3, part4, part5, part6, part7];
+    const parts = [part1, part2, part3, part4, part5, part6, part7,part8];
     const [partQuestions, setPartQuestions] = useState<any[]>([]);
     const [selectedPart, setSelectedPart] = useState<number>(1);
     const [storageUpdated, setStorageUpdated] = useState<boolean>(false);

@@ -587,3 +587,12 @@ For more Suspense examples and use cases, please see the React Documentation.
 SEO
 Next.js will wait for data fetching inside generateMetadata to complete before streaming UI to the client. This guarantees the first part of a streamed response includes <head> tags.
 Since streaming is server-rendered, it does not impact SEO. You can use the Rich Results Test tool from Google to see how your page appears to Google's web crawlers and view the serialized HTML (source).
+
+
+# STARTUP
+FE:
+1:npm i : để install node_modules về 
+2:npm run build : để install tệp .next
+3:để chạy nhập npm start( chạy như môi trường production)  hoặc npm run dev ( chạy trên môt trường dev)
+
+

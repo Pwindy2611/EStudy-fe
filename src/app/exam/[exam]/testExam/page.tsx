@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useRef,useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
-import { fetchAllParts, getAudioExam, getCompleteExam } from '@/service/api/apiExamRequest'; 
+import { fetchAllParts, getCompleteExam } from '@/service/api/apiExamRequest'; 
 import ExamDialog from "@/app/components/examSubmit/examSubmit";
 import ExamExitDialog from "@/app/components/examSubmit/examExit";
 import Part1Component from './part1';
@@ -25,7 +25,6 @@ const TestExam = ({ params }: { params: { exam: string } }) => {
     const examId = idExam;
     const dispatch = useDispatch();
     const user = useSelector((state: any) => state.persistedReducer.auth.login?.data);
-    const audio = useSelector((state: any) => state.ThunkReducer.exam.audioExam?.data?.examAudio);
     const part1 = useSelector((state: any) => state.ThunkReducer.exam.part1?.data?.part1Response);
     const part2 = useSelector((state: any) => state.ThunkReducer.exam.part2?.data?.part2Response);
     const part3 = useSelector((state: any) => state.ThunkReducer.exam.part3?.data?.part3Response);
@@ -62,7 +61,6 @@ const TestExam = ({ params }: { params: { exam: string } }) => {
 
     useEffect(() => {
         fetchAllParts(examId, dispatch);
-        getAudioExam(examId, dispatch);
     }, [dispatch,examId]);
 
     useEffect(() => {
@@ -286,13 +284,6 @@ const TestExam = ({ params }: { params: { exam: string } }) => {
             <div className="flex gap-8">
                 <div className="w-4/5">
                     <div className="testOnline__box">
-                        {audio && (
-                            <audio className="testExam__audio" controls>
-                                <source src={audio} type="audio/mpeg" />
-                                <track kind="captions" src="captions_en.vtt" srcLang="en" label="English" />
-                                Your browser does not support the audio element.
-                            </audio>
-                        )}
                         <ul className=" flex items-center flex-wrap w-full">
                             {['Part 1', 'Part 2', 'Part 3', 'Part 4', 'Part 5', 'Part 6', 'Part 7','Part 8','Part 9'].map((part, index) => (
                                 <li key={part} className="tag-search__item">

@@ -39,8 +39,8 @@ const ExamDialog: React.FC<examDialogProps> = ({ examId }) => {
     });
 
     const storedAnswers = JSON.parse(sessionStorage.getItem('answerTest') || '{}');
-    const part9Answers = JSON.parse(sessionStorage.getItem('answerTestPart9') || '{}');
-    const part9AnswersQuestion7 = JSON.parse(sessionStorage.getItem('answerQuestion7') || '{}');
+    // const part9Answers = JSON.parse(sessionStorage.getItem('answerTestPart9') || '{}');
+    // const part9AnswersQuestion7 = JSON.parse(sessionStorage.getItem('answerQuestion7') || '{}');
     const time = JSON.parse(sessionStorage.getItem('countdown') || '{}');
 
     const answersToSend = Object.keys(storedAnswers).map(key => ({
@@ -67,42 +67,42 @@ const ExamDialog: React.FC<examDialogProps> = ({ examId }) => {
     const userExamId = rest.responseUserExam.userExamId;
 
     // Prepare FormData for Part 9 answers
-    const formData = await preparePart9FormData(part9Answers, userExamId, idToast);
-    if (!formData) return; // Handle if there was an error in preparing data
+    // const formData = await preparePart9FormData(part9Answers, userExamId, idToast);
+    // if (!formData) return; // Handle if there was an error in preparing data
 
-    if (part9AnswersQuestion7.AudioURL) {
-      try {
-          const audioBlob = await fetch(part9AnswersQuestion7.AudioURL).then(res => {
-              if (!res.ok) throw new Error('Failed to fetch audio file for question 7');
-              return res.blob();
-          });
+  //   if (part9AnswersQuestion7.AudioURL) {
+  //     try {
+  //         const audioBlob = await fetch(part9AnswersQuestion7.AudioURL).then(res => {
+  //             if (!res.ok) throw new Error('Failed to fetch audio file for question 7');
+  //             return res.blob();
+  //         });
 
-          // Tạo FormData mới cho câu hỏi 7
-          const question7FormData = new FormData();
-          question7FormData.append("audioFile", audioBlob, 'audio_question7.wav'); // Thêm audio file
-          question7FormData.append("followUpQuestion", part9AnswersQuestion7.followUpQuestion); // Thêm câu hỏi theo dõi
-          question7FormData.append("userExamId", userExamId); // Thêm userExamId nếu cần
+  //         // Tạo FormData mới cho câu hỏi 7
+  //         const question7FormData = new FormData();
+  //         question7FormData.append("audioFile", audioBlob, 'audio_question7.wav'); // Thêm audio file
+  //         question7FormData.append("followUpQuestion", part9AnswersQuestion7.followUpQuestion); // Thêm câu hỏi theo dõi
+  //         question7FormData.append("userExamId", userExamId); // Thêm userExamId nếu cần
 
-          // Gọi hàm submitPart9Question7 để gửi dữ liệu
-          const responseQuestion7 = await submitPart9Question7(question7FormData);
-          if (!responseQuestion7) {
-              showErrorToast(idToast);
-              return;
-          }
-      } catch (error) {
-          console.error('Error fetching audio for question 7:', error);
-          showErrorToast(idToast);
-          return;
-      }
-  }
+  //         // Gọi hàm submitPart9Question7 để gửi dữ liệu
+  //         const responseQuestion7 = await submitPart9Question7(question7FormData);
+  //         if (!responseQuestion7) {
+  //             showErrorToast(idToast);
+  //             return;
+  //         }
+  //     } catch (error) {
+  //         console.error('Error fetching audio for question 7:', error);
+  //         showErrorToast(idToast);
+  //         return;
+  //     }
+  // }
     
 
     // Send request to submit Part 9 answers
-    const responsePart9 = await submitPart9(formData);
-    if (!(responsePart9 && responsePart9.length > 0)) {
-      showErrorToast(idToast);
-      return;
-    }
+    // const responsePart9 = await submitPart9(formData);
+    // if (!(responsePart9 && responsePart9.length > 0)) {
+    //   showErrorToast(idToast);
+    //   return;
+    // }
 
     // Clear session storage and notify success
     clearSessionStorage();

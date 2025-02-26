@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useRef,useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
-import { fetchAllParts, getCompleteExam } from '@/service/api/apiExamRequest'; 
+import { fetchAllParts, getAudioExam, getCompleteExam } from '@/service/api/apiExamRequest'; 
 import ExamDialog from "@/app/components/examSubmit/examSubmit";
 import ExamExitDialog from "@/app/components/examSubmit/examExit";
 import Part1Component from './part1';
@@ -13,7 +13,6 @@ import Part5Component from './part5';
 import Part6Component from './part6';
 import Part7Component from './part7';
 import Part8Component from './part8';
-import Part9Component from './part9';
 import LoadingBody from '@/app/components/partialView/loadingBody';
 import LoadingContent from '@/app/components/partialView/loadingContent';
 import { Bounce, toast } from 'react-toastify';
@@ -25,6 +24,7 @@ const TestExam = ({ params }: { params: { exam: string } }) => {
     const examId = idExam;
     const dispatch = useDispatch();
     const user = useSelector((state: any) => state.persistedReducer.auth.login?.data);
+    const audio = useSelector((state: any) => state.ThunkReducer.exam.audioExam?.data?.examAudio);
     const part1 = useSelector((state: any) => state.ThunkReducer.exam.part1?.data?.part1Response);
     const part2 = useSelector((state: any) => state.ThunkReducer.exam.part2?.data?.part2Response);
     const part3 = useSelector((state: any) => state.ThunkReducer.exam.part3?.data?.part3Response);
@@ -33,7 +33,6 @@ const TestExam = ({ params }: { params: { exam: string } }) => {
     const part6 = useSelector((state: any) => state.ThunkReducer.exam.part6?.data?.part6Responses);
     const part7 = useSelector((state: any) => state.ThunkReducer.exam.part7?.data?.part7Response);
     const part8 = useSelector((state: any) => state.ThunkReducer.exam.part8?.data?.part8Response);
-    const part9 = useSelector((state: any) => state.ThunkReducer.exam.part9?.data?.part9Response);
     const [partQuestions, setPartQuestions] = useState<any[]>([]);
     const [selectedPart, setSelectedPart] = useState<number>(1);
     const [storageUpdated, setStorageUpdated] = useState<boolean>(false);
@@ -61,10 +60,11 @@ const TestExam = ({ params }: { params: { exam: string } }) => {
 
     useEffect(() => {
         fetchAllParts(examId, dispatch);
+        getAudioExam(examId, dispatch);
     }, [dispatch,examId]);
 
     useEffect(() => {
-        const parts = [part1, part2, part3, part4, part5, part6, part7,part8,part9];
+        const parts = [part1, part2, part3, part4, part5, part6, part7,part8];
         const partData = parts.map((part, index) => ({
             partName: `Part ${index + 1}`,
             questions: part ? part.map((q: any) => ({
@@ -74,7 +74,7 @@ const TestExam = ({ params }: { params: { exam: string } }) => {
         }));
         setPartQuestions(partData);
         initializeAnswerTest(parts);
-    }, [part1, part2, part3, part4, part5, part6,part7,part8,part9]);
+    }, [part1, part2, part3, part4, part5, part6,part7,part8]);
 
     const initializeAnswerTest = (parts: any[]) => {
         const answerTest: { [key: string]: { QuestionId: number, Answer: string, State: boolean } } = {};
@@ -213,7 +213,7 @@ const TestExam = ({ params }: { params: { exam: string } }) => {
         };
     }, []);
 
-    if (!audio || !part1 || !part2 || !part3 || !part4 || !part5 || !part6 || !part7||!part8|| !part9) {
+    if (!audio || !part1 || !part2 || !part3 || !part4 || !part5 || !part6 || !part7||!part8) {
         return (
             <>
                 <LoadingBody />
@@ -242,8 +242,6 @@ const TestExam = ({ params }: { params: { exam: string } }) => {
                 return <Part7Component questionRefs={questionRefs} onAnswerChange={handleAnswerChange} />;
             case 8:
                 return <Part8Component questionRefs={questionRefs} onAnswerChange={handleAnswerChange} />;
-            case 9:
-                return <Part9Component questionRefs={questionRefs} onAnswerChange={handleAnswerChange} />;
             default:
                 return <div>Select a part to view.</div>;
         }
@@ -284,8 +282,15 @@ const TestExam = ({ params }: { params: { exam: string } }) => {
             <div className="flex gap-8">
                 <div className="w-4/5">
                     <div className="testOnline__box">
+                        {audio && (
+                            <audio className="testExam__audio" controls>
+                                <source src={audio} type="audio/mpeg" />
+                                <track kind="captions" src="captions_en.vtt" srcLang="en" label="English" />
+                                Your browser does not support the audio element.
+                            </audio>
+                        )}
                         <ul className=" flex items-center flex-wrap w-full">
-                            {['Part 1', 'Part 2', 'Part 3', 'Part 4', 'Part 5', 'Part 6', 'Part 7','Part 8','Part 9'].map((part, index) => (
+                            {['Part 1', 'Part 2', 'Part 3', 'Part 4', 'Part 5', 'Part 6', 'Part 7','Part 8'].map((part, index) => (
                                 <li key={part} className="tag-search__item">
                                     <button
                                         onClick={() => setSelectedPart(index + 1)}
